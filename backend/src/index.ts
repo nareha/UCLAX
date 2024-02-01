@@ -5,6 +5,9 @@ dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 9000;
+const cors = require('cors')
+
+app.use(cors())
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Mickey's Express Server. Have a wonderful day!");
