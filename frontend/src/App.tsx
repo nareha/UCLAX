@@ -1,33 +1,21 @@
 import React from 'react';
-import axios from 'axios';
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
 
-const apiCall = () => {
-  axios.get('http://localhost:9000').then((data) => {
-    console.log(data.data)
-  })
-}
+import Navbar from './components/Navbar/Navbar';
+import LandingPage from './components/LandingPage/LandingPage';
+import ProfilePage from './components/ProfilePage/ProfilePage';
+import NotFoundPage from './components/404Page/404Page';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <button onClick={apiCall}>Make API Call</button>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Navbar />
+      <Routes>
+  	    <Route path="/" element={<LandingPage />} />
+  	    <Route path="/profile" element={<ProfilePage />} />
+  	    <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </>
   );
 }
 
