@@ -1,6 +1,8 @@
 .info-container {
   margin: auto;
   width: 50%;
+  /* Border is just for visualization of the div dimensions */
+  padding: 2rem;
   border-style: solid;
-  border-color: black;
+  border-color: rgba(0,0,0,.4);
 }
