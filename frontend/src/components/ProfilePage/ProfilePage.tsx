@@ -1,4 +1,5 @@
 import React from 'react';
+
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
