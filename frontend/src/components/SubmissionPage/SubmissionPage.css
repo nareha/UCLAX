@@ -1,8 +1,21 @@
 .page{
-    text-align: center;
+  text-align: center;
+}
+
+.text {
+    margin-bottom: 5%;
+}
+
+.title-text {
+    font-size: 30px;
 }
 
 table {  
-    text-align: left;
-    margin: auto;
+  text-align: left;
+  margin: auto;
+  margin-bottom: 5%;
+}
+
+td {
+  padding: 0.4rem 4rem;
 }

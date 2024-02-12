@@ -1,18 +1,18 @@
 .elems {
-    margin: auto;
-    margin-top: 5vh;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 30vh;
+  margin: auto;
+  margin-top: 5vh;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 30vh;
 }
 
 .title-text {
-    text-align: center;
-    font-size: 40px;
+  text-align: center;
+  font-size: 40px;
 }
 
 .description{
-    text-align: center;
+  text-align: center;
 }

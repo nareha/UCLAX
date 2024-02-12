@@ -1,6 +1,8 @@
 import React from 'react';
 import SubmissionField from '../SubmissionField/SubmissionField';
 
+import './SubmissionPage.css';
+
 interface SubmissionValue {
   label: string,
   type: "datetime-local" | "text" | "number"
@@ -36,8 +38,10 @@ const submissionValues: Array<SubmissionValue> = [
 const SubmissionPage: React.FC = () => {
   return (
     <div className="page">
-        <p>Want to Share a Ride?</p>
-        <p>Submit the following information to get your match</p>        
+      <div className="text">
+        <p className="title-text">Want to Share a Ride?</p>
+        <p>Submit the following information to get your match.</p>        
+      </div>
       <table>
         {submissionValues.map(({label, type}) => <SubmissionField label={label} type={type} />)}
       </table>
