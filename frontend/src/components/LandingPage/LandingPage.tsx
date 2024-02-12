@@ -43,13 +43,13 @@ const LandingPage: React.FC = () => {
   return (
     <div>
       <div className="title-logo">
-        UC LAX
+        <p>UC LAX</p>
       </div>
       <div className="description">
-          Verify to start moving <br></br>
+          <p>Verify to start moving</p>
           <button>Log in with Google</button>
       </div>
-      
+
       <button onClick={apiCall}>Get a message from Mickey!</button>
       <button onClick={postCall}>Send a sample message to Mickey!</button>
     </div>
