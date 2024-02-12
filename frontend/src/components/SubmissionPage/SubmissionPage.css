@@ -1,9 +1,8 @@
-.center{
+.page{
     text-align: center;
 }
 
 table {  
-text-align: left;
-margin-right: auto;  
-margin-left: auto;
+    text-align: left;
+    margin: auto;
 }

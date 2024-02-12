@@ -42,12 +42,14 @@ const postCall = () => {
 const LandingPage: React.FC = () => {
   return (
     <div>
-      <div className="title-logo">
-        <p>UC LAX</p>
-      </div>
-      <div className="description">
-          <p>Verify to start moving</p>
-          <button>Log in with Google</button>
+      <div className="elems">
+        <div className="title-text">
+          <h1>UC LAX</h1>
+        </div>
+        <div className="description">
+            <p>Verify to start moving</p>
+            <button>Log in with Google</button>
+        </div>
       </div>
 
       <button onClick={apiCall}>Get a message from Mickey!</button>
