@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 
+import './LandingPage.css';
+
 const apiCall = () => {
   axios.get('http://localhost:9000').then((data) => {
     console.log(data.data);
@@ -40,6 +42,14 @@ const postCall = () => {
 const LandingPage: React.FC = () => {
   return (
     <div>
+      <div className="title-logo">
+        UC LAX
+      </div>
+      <div className="description">
+          Verify to start moving <br></br>
+          <button>Log in with Google</button>
+      </div>
+      
       <button onClick={apiCall}>Get a message from Mickey!</button>
       <button onClick={postCall}>Send a sample message to Mickey!</button>
     </div>
