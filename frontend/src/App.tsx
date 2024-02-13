@@ -14,7 +14,7 @@ const App: React.FC = () => {
       <Routes>
   	    <Route path="/" element={<LandingPage />} />
   	    <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/submit" element = {<SubmissionPage />} />
+        <Route path="/submit" element={<SubmissionPage />} />
   	    <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </>
