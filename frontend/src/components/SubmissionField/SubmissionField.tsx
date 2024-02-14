@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface Props {
+export interface SubmissionValue {
   label: string;
-  type: string;
+  type: "datetime-local" | "text" | "number"
 }
 
-const SubmissionField: React.FC<Props> = ({ label, type }: Props) => {
+const SubmissionField: React.FC<SubmissionValue > = ({label, type}: SubmissionValue) => {
   return (
     <tr>
       <td><label>{label}</label></td>

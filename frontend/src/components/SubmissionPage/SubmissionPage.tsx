@@ -1,12 +1,7 @@
 import React from 'react';
-import SubmissionField from '../SubmissionField/SubmissionField';
+import SubmissionField , { SubmissionValue } from '../SubmissionField/SubmissionField';
 
 import './SubmissionPage.css';
-
-interface SubmissionValue {
-  label: string,
-  type: "datetime-local" | "text" | "number"
-}
 
 const submissionValues: Array<SubmissionValue> = [
   {
@@ -32,7 +27,7 @@ const submissionValues: Array<SubmissionValue> = [
   {
     label: "Maximum Party Capacity:",
     type: "number"
-  },
+  }
 ];
 
 const SubmissionPage: React.FC = () => {
