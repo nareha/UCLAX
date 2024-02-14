@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface Props {
-    label: string;
-    type: string;
+  label: string;
+  type: string;
 }
 
 const SubmissionField: React.FC<Props> = ({ label, type }: Props) => {
