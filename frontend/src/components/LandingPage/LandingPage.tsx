@@ -9,24 +9,30 @@ const apiCall = () => {
   })
 }
 
-enum Destination {
+enum Location {
   LAX = "LAX",
-  UCLA = "UCLA"
+  UCLA = "UCLA",
+  BUR = "BUR"
 }
 
 type Submission = {
+  userid: number;
   interval_start: Date;
   interval_end: Date;
-  destination: Destination;
+  source: Location;
+  destination: Location;
   contact: string;
+  max_group_size?: number;
 };
 
 const postCall = () => {
   // Example data - random interval_start, interval_end, destination, and contact
-  const submissionData : Submission= {
+  const submissionData : Submission = {
+    userid: 1,
     interval_start: new Date('2024-02-10T09:00:00Z'),
     interval_end: new Date('2024-02-10T10:00:00Z'),
-    destination: Destination.LAX,
+    source: Location.UCLA,
+    destination: Location.LAX,
     contact: '@ChadJohnson'
   };
 
