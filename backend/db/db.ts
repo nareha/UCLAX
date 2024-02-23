@@ -63,3 +63,24 @@ export function addSubmission(submission: Submission) {
     submission.contact, submission.max_group_size);
   stmt.finalize();
 }
+
+// TODO(joycetung): implement filtering support.
+/**
+ * Queries the submission table and returns all results
+ * 
+ * @returns the table's rows as an Array with elements of type Submission.
+ */
+export function querySubmissions(): Array<Submission> {
+  let queryString : string = 'SELECT * FROM submissions';
+  let submissionRows: Array<Submission> = [];
+  db.all(queryString, (err: Error | null, rows: Array<string>) => {
+    if (err) {
+      console.error(err.message);
+    }
+    submissionRows = rows.map(function(rowStr: string):Submission{
+      let submissionRow:Submission = JSON.parse(rowStr);
+      return submissionRow;
+    });
+  });
+  return submissionRows;
+}
