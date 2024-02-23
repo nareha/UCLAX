@@ -2,8 +2,6 @@ import type { Submission } from "../src/structures";
 
 import sqlite3 from 'sqlite3';
 
-// const sqlite3 = require('sqlite3').verbose();
-
 // open the db
 const db = new sqlite3.Database('./rideshare.db', (err: Error | null) => {
   if (err) {
@@ -35,7 +33,9 @@ db.serialize(() => {
         );`);
 });
 
-
+/**
+ * Closes the DB connection.
+ */
 export function closeDB() {
   // close the db
   db.close((err: Error | null) => {
@@ -47,7 +47,11 @@ export function closeDB() {
   });
 }
 
-// adds new submission to the submissions table IF the values submitted are valid.
+/**
+ * Adds new submission to the submissions table if the values submitted are valid.
+ * 
+ * @param submission the submission to be added to the table
+ */
 export function addSubmission(submission: Submission) {
   // check for erroneous inputs, throw error if found
   if (submission.interval_start > submission.interval_end) {
