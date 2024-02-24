@@ -1,12 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { GoogleLogin } from '@react-oauth/google';
-import { googleLogout } from '@react-oauth/google';
 import { useGoogleLogin } from '@react-oauth/google';
-import { useGoogleOneTapLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
 
 import './LandingPage.css';
 
