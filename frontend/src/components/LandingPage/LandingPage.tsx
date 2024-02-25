@@ -43,9 +43,14 @@ const postCall = () => {
 
 const LandingPage: React.FC = () => {
   let loggedIn = false;
-  let userInfo = {email:"", email_verified:"", hd:"", name:""}
+  let userInfo = {
+    email:"",
+    email_verified:"",
+    hd:"",
+    name:""
+  }
   
-  const googleLogin = useGoogleLogin({
+  const googleLogin = useGoogleLogin ({
     onSuccess: async tokenResponse => {
       // fetching userinfo can be done on the client or the server
       userInfo = await axios
@@ -55,7 +60,7 @@ const LandingPage: React.FC = () => {
         .then(res => res.data);
       
       console.log(userInfo);
-      if (!('email' in userInfo) || !('email_verified' in userInfo) || !('name' in userInfo)  ){ 
+      if (!('email' in userInfo) || !('email_verified' in userInfo) || !('name' in userInfo) ){ 
         throw new Error('Unable to login with this account');
       }
       if (!('hd' in userInfo) ){
@@ -65,10 +70,10 @@ const LandingPage: React.FC = () => {
       loggedIn = true;
 
       console.log(userInfo.email)
-      if(!userInfo.email_verified){
+      if (!userInfo.email_verified) {
         throw new Error('Email is not verified');
       }
-      if(userInfo.hd != "g.ucla.edu"){
+      if (userInfo.hd != "g.ucla.edu") {
         throw new Error('Not a UCLA Email');
       }
     },
@@ -83,7 +88,7 @@ const LandingPage: React.FC = () => {
         <div className="description">
             <p>Verify to start moving</p>
             <h1>
-            <button onClick={() => googleLogin()}>Sign in with Google </button>
+            <button onClick={ () => googleLogin() }>Sign in with Google</button>
             </h1>
         </div>
       </div>
