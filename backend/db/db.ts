@@ -1,11 +1,14 @@
-const sqlite3 = require('sqlite3').verbose();
+import type { Submission } from "../src/structures";
+
+import sqlite3 from 'sqlite3';
 
 // open the db
-let db = new sqlite3.Database('./rideshare.db', sqlite3.OPEN_CREATE, (err: { message: any; }) => {
+const db = new sqlite3.Database('./rideshare.db', (err: Error | null) => {
   if (err) {
     console.error(err.message);
+  } else {
+    console.log('Connected to the rideshare database.');
   }
-  console.log('Connected to the rideshare database.');
 });
 
 // init
@@ -30,11 +33,58 @@ db.serialize(() => {
         );`);
 });
 
+/**
+ * Closes the DB connection.
+ */
+export function closeDB() {
+  // close the db
+  db.close((err: Error | null) => {
+    if (err) {
+      return console.error(err.message);
+    } else {
+      console.log('Close the database connection.');
+    }
+  });
+}
 
-// close the db
-db.close((err: { message: any; }) => {
-  if (err) {
-    return console.error(err.message);
+/**
+ * Adds new submission to the submissions table if the values submitted are valid.
+ * 
+ * @param submission the submission to be added to the table
+ */
+export function addSubmission(submission: Submission) {
+  // check for erroneous inputs, throw error if found
+  if (submission.interval_start > submission.interval_end) {
+    throw new Error("Invalid start and end times.");
   }
-  console.log('Close the database connection.');
-});
+  
+  // prepare and run the statement
+  let stmt = db.prepare(`INSERT INTO submissions(user_id, early_time, \
+    late_time, source, destination, contact, max_group_size) \
+    VALUES (?, ?, ?, ?, ?, ?, ?)`);
+  stmt.run(submission.userid, submission.interval_start,
+    submission.interval_end, submission.source, submission.destination,
+    submission.contact, submission.max_group_size);
+  stmt.finalize();
+}
+
+// TODO(joycetung): implement filtering support.
+/**
+ * Queries the submission table and returns all results
+ * 
+ * @returns the table's rows as an Array with elements of type Submission.
+ */
+export function querySubmissions(): Array<Submission> {
+  let queryString : string = 'SELECT * FROM submissions';
+  let submissionRows: Array<Submission> = [];
+  db.all(queryString, (err: Error | null, rows: Array<string>) => {
+    if (err) {
+      console.error(err.message);
+    }
+    submissionRows = rows.map(function(rowStr: string):Submission{
+      let submissionRow:Submission = JSON.parse(rowStr);
+      return submissionRow;
+    });
+  });
+  return submissionRows;
+}
