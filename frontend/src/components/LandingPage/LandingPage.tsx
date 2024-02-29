@@ -47,8 +47,11 @@ const postCall = () => {
     });
 }
 
-const LandingPage: React.FC = () => {
-  let loggedIn = false;
+interface Verification {
+  verify: () => void;
+}
+
+const LandingPage: React.FC<Verification> = ({verify}: Verification) => {
   let userInfo = {
     email:"",
     email_verified:"",
@@ -73,15 +76,15 @@ const LandingPage: React.FC = () => {
         throw new Error('User must sign in with UCLA email');
       }
 
-      loggedIn = true;
-
       console.log(userInfo.email)
       if (!userInfo.email_verified) {
         throw new Error('Email is not verified');
       }
-      if (userInfo.hd != "g.ucla.edu") {
+      if (userInfo.hd !== "g.ucla.edu") {
         throw new Error('Not a UCLA Email');
       }
+
+      verify();
     },
     onError: errorResponse => console.log(errorResponse)
   });
