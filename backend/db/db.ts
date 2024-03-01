@@ -1,4 +1,4 @@
-import type { Submission } from "../src/structures";
+import { type Submission } from "../src/structures";
 
 import sqlite3 from 'sqlite3';
 
@@ -74,17 +74,17 @@ export function addSubmission(submission: Submission) {
  * 
  * @returns the table's rows as an Array with elements of type Submission.
  */
-export function querySubmissions(): Array<Submission> {
-  let queryString : string = 'SELECT * FROM submissions';
-  let submissionRows: Array<Submission> = [];
-  db.all(queryString, (err: Error | null, rows: Array<string>) => {
-    if (err) {
-      console.error(err.message);
-    }
-    submissionRows = rows.map(function(rowStr: string):Submission{
-      let submissionRow:Submission = JSON.parse(rowStr);
-      return submissionRow;
+export function querySubmissions(): Promise<any[]> {
+  return new Promise((resolve, reject) => {
+    let queryString: string = 'SELECT * FROM submissions';
+    db.all(queryString, (err: Error | null, rows: Array<string>) => {
+      if (err) {
+        console.error(err.message);
+        reject(err);
+      } else {
+        console.log("Received: ", rows);
+        resolve(rows);
+      }
     });
   });
-  return submissionRows;
 }
