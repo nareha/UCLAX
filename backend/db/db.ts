@@ -1,5 +1,4 @@
 import { type Submission } from "../src/structures";
-
 import sqlite3 from 'sqlite3';
 
 // open the db
@@ -57,7 +56,7 @@ export function addSubmission(submission: Submission) {
   if (submission.interval_start > submission.interval_end) {
     throw new Error("Invalid start and end times.");
   }
-  
+
   // prepare and run the statement
   let stmt = db.prepare(`INSERT INTO submissions(user_id, early_time, \
     late_time, source, destination, contact, max_group_size) \
