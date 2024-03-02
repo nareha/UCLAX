@@ -47,6 +47,20 @@ const postCall = () => {
     });
 }
 
+const addUser = () => {
+  const payload = {
+    email: "mick@ucla.edu"
+  };
+  
+  axios.post('http://localhost:9000/user', payload)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error('Error adding user:', error);
+    });
+}
+
 interface Verification {
   verify: () => void;
 }
@@ -104,6 +118,7 @@ const LandingPage: React.FC<Verification> = ({verify}: Verification) => {
 
       <button onClick={apiCall}>Get a message from Mickey!</button>
       <button onClick={postCall}>Send a sample message to Mickey!</button>
+      <button onClick={addUser}>Add Mickey as a user to the database!</button>
     </div>
   );
 }
