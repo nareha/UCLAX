@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import type { Submission } from "./structures";
 
 import { addSubmission, querySubmissions } from "../db/db";
+import { formatDate } from "./utils";
 
 dotenv.config();
 
@@ -20,6 +21,10 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/table", (req: Request, res: Response) => {
   const submissions = querySubmissions();
   submissions.then((result) => {
+    result.forEach((submission) => {
+      submission.early_time = formatDate(new Date(submission.early_time));
+      submission.late_time = formatDate(new Date(submission.late_time));
+    });
     res.send(result);
   });
 });
