@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import type { Submission } from "./structures";
 
-import { closeDB, addSubmission } from "../db/db";
+import { addSubmission, querySubmissions } from "../db/db";
 
 dotenv.config();
 
@@ -17,6 +17,12 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Mickey's Express Server. Have a wonderful day!");
 });
 
+app.get("/table", (req: Request, res: Response) => {
+  const submissions = querySubmissions();
+  submissions.then((result) => {
+    res.send(result);
+  });
+});
 
 app.post("/submission", (req: Request, res: Response) => {
   //make sure that the body of the request has the data that we want
