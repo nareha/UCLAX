@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import type { Submission } from "./structures";
 
+import { formatDate } from "./utils";
 import { addSubmission, querySubmissions, addUser } from "../db/db";
 
 dotenv.config();
@@ -20,6 +21,10 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/table", (req: Request, res: Response) => {
   const submissions = querySubmissions();
   submissions.then((result) => {
+    result.forEach((submission) => {
+      submission.early_time = formatDate(new Date(submission.early_time));
+      submission.late_time = formatDate(new Date(submission.late_time));
+    });
     res.send(result);
   });
 });
