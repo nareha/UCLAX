@@ -48,10 +48,11 @@ const postCall = () => {
 }
 
 interface Verification {
+  isVerified: boolean;
   verify: () => void;
 }
 
-const LandingPage: React.FC<Verification> = ({verify}: Verification) => {
+const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification) => {
   let userInfo = {
     email:"",
     email_verified:"",
@@ -94,11 +95,13 @@ const LandingPage: React.FC<Verification> = ({verify}: Verification) => {
         <div className="title-text">
           <h1>UC LAX</h1>
         </div>
-        <div className="description">
-            <p>Verify to start moving</p>
-            <h1>
-            <button onClick={ () => googleLogin() }>Sign in with Google</button>
-            </h1>
+        <div className="description">  
+            {!isVerified && 
+              <>
+              <p>Verify to start moving</p>
+              <button onClick={ () => googleLogin() }>Sign in with Google</button>
+              </>
+            }
         </div>
       </div>
 
