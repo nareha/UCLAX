@@ -2,8 +2,8 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import type { Submission } from "./structures";
 
-import { addSubmission, querySubmissions } from "../db/db";
 import { formatDate } from "./utils";
+import { addSubmission, querySubmissions, addUser } from "../db/db";
 
 dotenv.config();
 
@@ -37,7 +37,19 @@ app.post("/submission", (req: Request, res: Response) => {
 
   console.log("Received: ", submission);
   res.send('Mickey has acknowledged your POST request. Have a wonderful day!');
-})
+});
+
+app.post("/user", (req: Request, res: Response) => {
+  let email = req.body.email;
+  console.log("Received: ", email);
+
+  const receipt = addUser(email);
+  receipt.then((result) => {
+    res.send(result);
+    console.log(result);
+  });
+  
+});
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

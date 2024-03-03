@@ -13,3 +13,8 @@ export type Submission = {
     contact: string;
     max_group_size?: number;
 };
+
+export type User = {
+    user_id: number;
+    email: string;
+};
