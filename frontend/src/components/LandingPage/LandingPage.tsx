@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-
 import { useGoogleLogin } from '@react-oauth/google';
 
+import LoginFailToast from '../LoginFailToast/LoginFailToast';
 import './LandingPage.css';
 
 const apiCall = () => {
@@ -66,7 +66,11 @@ interface Verification {
   verify: () => void;
 }
 
+
 const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification) => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
+
   let userInfo = {
     email:"",
     email_verified:"",
@@ -85,26 +89,39 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
       
       console.log(userInfo);
       if (!('email' in userInfo) || !('email_verified' in userInfo) || !('name' in userInfo) ){ 
-        throw new Error('Unable to login with this account');
+        setAlertText("Unable to login with this account");
+        setShowAlert(true);
+        return;
       }
       if (!('hd' in userInfo) ){
-        throw new Error('User must sign in with UCLA email');
+        setAlertText("User must sign in with UCLA email");
+        setShowAlert(true);
+        return;
       }
 
       console.log(userInfo.email)
       if (!userInfo.email_verified) {
-        throw new Error('Email is not verified');
+        setAlertText("Email is not verified");
+        setShowAlert(true);
+        return;
       }
       if (userInfo.hd !== "g.ucla.edu") {
-        throw new Error('Not a UCLA Email');
+        setAlertText("Not a UCLA Email");
+        setShowAlert(true);
+        return;
       }
 
       verify();
     },
-    onError: errorResponse => console.log(errorResponse)
+    onError: errorResponse => {
+      setAlertText("Login failed, please try again.");
+      setShowAlert(true);
+      return;
+    }
   });
   return (
     <div>
+      <LoginFailToast showAlert={showAlert} failMessage={alertText} closeAlert={() => {setShowAlert(false)}} />
       <div className="elems">
         <div className="title-text">
           <h1>UC LAX</h1>
