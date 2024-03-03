@@ -1,5 +1,4 @@
-import type { Submission } from "../src/structures";
-
+import { type Submission, type User } from "../src/structures";
 import sqlite3 from 'sqlite3';
 
 // open the db
@@ -47,6 +46,46 @@ export function closeDB() {
   });
 }
 
+async function findUserByEmail(email: string): Promise<User | null> {
+  const query = 'SELECT * FROM users WHERE email = ? LIMIT 1';
+  try {
+    const row = await new Promise<User | null>((resolve, reject) => {
+      db.get(query, [email], (err, row) => {
+        if (err) reject(err);
+        else resolve(row as User | null);
+      });
+    });
+    return row;
+  } catch (error) {
+    console.error('Error finding user by email:', error);
+    throw new Error('Database error occurred.');
+  }
+}
+
+export async function addUser(email: string): Promise<string> {
+  console.log("Checking if user is already in db");
+
+  const existingUser = await findUserByEmail(email);
+  if (existingUser) {
+    return `This user already exists with an id of ${existingUser.user_id}.`;
+  }
+
+  console.log("User not in db, adding");
+  const insertUserQuery = 'INSERT INTO users (email) VALUES (?)';
+  try {
+    await new Promise<void>((resolve, reject) => {
+      db.run(insertUserQuery, [email], function(err) {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+    return `User with email ${email} has been added to the database.`;
+  } catch (error) {
+    console.error('Error adding user:', error);
+    return 'Error adding user to the database.';
+  }
+}
+
 /**
  * Adds new submission to the submissions table if the values submitted are valid.
  * 
@@ -57,7 +96,7 @@ export function addSubmission(submission: Submission) {
   if (submission.interval_start > submission.interval_end) {
     throw new Error("Invalid start and end times.");
   }
-  
+
   // prepare and run the statement
   let stmt = db.prepare(`INSERT INTO submissions(user_id, early_time, \
     late_time, source, destination, contact, max_group_size) \
@@ -74,17 +113,17 @@ export function addSubmission(submission: Submission) {
  * 
  * @returns the table's rows as an Array with elements of type Submission.
  */
-export function querySubmissions(): Array<Submission> {
-  let queryString : string = 'SELECT * FROM submissions';
-  let submissionRows: Array<Submission> = [];
-  db.all(queryString, (err: Error | null, rows: Array<string>) => {
-    if (err) {
-      console.error(err.message);
-    }
-    submissionRows = rows.map(function(rowStr: string):Submission{
-      let submissionRow:Submission = JSON.parse(rowStr);
-      return submissionRow;
+export function querySubmissions(): Promise<any[]> {
+  return new Promise((resolve, reject) => {
+    let queryString: string = 'SELECT * FROM submissions';
+    db.all(queryString, (err: Error | null, rows: Array<string>) => {
+      if (err) {
+        console.error(err.message);
+        reject(err);
+      } else {
+        console.log("Received: ", rows);
+        resolve(rows);
+      }
     });
   });
-  return submissionRows;
 }

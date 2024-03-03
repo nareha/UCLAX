@@ -21,7 +21,7 @@ const App: React.FC = () => {
       <GoogleOAuthProvider clientId="855516960445-ue7h075jd8jcp9jukvtbgd235sr29q27.apps.googleusercontent.com">
         <Navbar isVerified={isVerified} />
         <Routes>
-  	      <Route path="/" element={<LandingPage verify={handleIsVerified} />} />
+  	      <Route path="/" element={<LandingPage isVerified={isVerified} verify={handleIsVerified} />} />
           <Route path="/ridesharers" element={isVerified ? <RidesharersPage /> : <Navigate to="/" />} />
           <Route path="/profile" element={isVerified ? <ProfilePage /> : <Navigate to="/" />} />
           <Route path="/submit" element={isVerified ? <SubmissionPage /> : <Navigate to="/" />} />

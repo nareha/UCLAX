@@ -47,11 +47,27 @@ const postCall = () => {
     });
 }
 
+const addUser = () => {
+  const payload = {
+    email: "mick@ucla.edu"
+  };
+  
+  axios.post('http://localhost:9000/user', payload)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.error('Error adding user:', error);
+    });
+}
+
 interface Verification {
+  isVerified: boolean;
   verify: () => void;
 }
 
-const LandingPage: React.FC<Verification> = ({verify}: Verification) => {
+
+const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
 
@@ -106,16 +122,19 @@ const LandingPage: React.FC<Verification> = ({verify}: Verification) => {
         <div className="title-text">
           <h1>UC LAX</h1>
         </div>
-        <div className="description">
-            <p>Verify to start moving</p>
-            <h1>
-            <button onClick={ () => googleLogin() }>Sign in with Google</button>
-            </h1>
+        <div className="description">  
+            {!isVerified && 
+              <>
+              <p>Verify to start moving</p>
+              <button onClick={ () => googleLogin() }>Sign in with Google</button>
+              </>
+            }
         </div>
       </div>
 
       <button onClick={apiCall}>Get a message from Mickey!</button>
       <button onClick={postCall}>Send a sample message to Mickey!</button>
+      <button onClick={addUser}>Add Mickey as a user to the database!</button>
     </div>
   );
 }
