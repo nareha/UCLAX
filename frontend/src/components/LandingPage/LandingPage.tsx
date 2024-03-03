@@ -89,31 +89,35 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
       
       console.log(userInfo);
       if (!('email' in userInfo) || !('email_verified' in userInfo) || !('name' in userInfo) ){ 
-        setAlertText("Unable to login with this account")
+        setAlertText("Unable to login with this account");
         setShowAlert(true);
         return;
       }
       if (!('hd' in userInfo) ){
-        setAlertText("User must sign in with UCLA email")
+        setAlertText("User must sign in with UCLA email");
         setShowAlert(true);
         return;
       }
 
       console.log(userInfo.email)
       if (!userInfo.email_verified) {
-        setAlertText("Email is not verified")
+        setAlertText("Email is not verified");
         setShowAlert(true);
         return;
       }
       if (userInfo.hd !== "g.ucla.edu") {
-        setAlertText("Not a UCLA Email")
+        setAlertText("Not a UCLA Email");
         setShowAlert(true);
         return;
       }
 
       verify();
     },
-    onError: errorResponse => console.log(errorResponse)
+    onError: errorResponse => {
+      setAlertText("Login failed, please try again.");
+      setShowAlert(true);
+      return;
+    }
   });
   return (
     <div>
