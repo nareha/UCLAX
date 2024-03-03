@@ -1,4 +1,4 @@
-import { type Submission } from "../src/structures";
+import { type Submission, type User } from "../src/structures";
 import sqlite3 from 'sqlite3';
 
 // open the db
@@ -44,6 +44,46 @@ export function closeDB() {
       console.log('Close the database connection.');
     }
   });
+}
+
+async function findUserByEmail(email: string): Promise<User | null> {
+  const query = 'SELECT * FROM users WHERE email = ? LIMIT 1';
+  try {
+    const row = await new Promise<User | null>((resolve, reject) => {
+      db.get(query, [email], (err, row) => {
+        if (err) reject(err);
+        else resolve(row as User | null);
+      });
+    });
+    return row;
+  } catch (error) {
+    console.error('Error finding user by email:', error);
+    throw new Error('Database error occurred.');
+  }
+}
+
+export async function addUser(email: string): Promise<string> {
+  console.log("Checking if user is already in db");
+
+  const existingUser = await findUserByEmail(email);
+  if (existingUser) {
+    return `This user already exists with an id of ${existingUser.user_id}.`;
+  }
+
+  console.log("User not in db, adding");
+  const insertUserQuery = 'INSERT INTO users (email) VALUES (?)';
+  try {
+    await new Promise<void>((resolve, reject) => {
+      db.run(insertUserQuery, [email], function(err) {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+    return `User with email ${email} has been added to the database.`;
+  } catch (error) {
+    console.error('Error adding user:', error);
+    return 'Error adding user to the database.';
+  }
 }
 
 /**
