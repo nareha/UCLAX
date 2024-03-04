@@ -6,12 +6,12 @@ export interface Info {
   contact: string;
   source: "UCLA" | "LAX" | "BUR";
   destination: "UCLA" | "LAX" | "BUR";
-  intervalStart: string;
-  intervalEnd: string;
+  early_time: string;
+  late_time: string;
   maxParty?: number;
 }
 
-const InfoBox: React.FC<Info> = ({contact, source, destination, intervalStart, intervalEnd, maxParty}: Info) => {
+const InfoBox: React.FC<Info> = ({contact, source, destination, early_time, late_time, maxParty}: Info) => {
   return (
     <Card>
       <CardContent style={{wordWrap: "break-word"}}>
@@ -22,7 +22,7 @@ const InfoBox: React.FC<Info> = ({contact, source, destination, intervalStart, i
           Going from {source} to {destination}
         </Typography>
         <Typography>
-          Arrival Time: {intervalStart} - {intervalEnd}
+          Arrival Time: {early_time} - {late_time}
         </Typography>
         {maxParty &&
           <Typography>
