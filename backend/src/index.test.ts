@@ -1,14 +1,11 @@
 import request from 'supertest';
-import express, { Express } from "express";
-import dotenv from "dotenv";
+import { Express } from "express";
 
 enum Location {
     LAX = "LAX",
     UCLA = "UCLA",
     BUR = "BUR"
   }
-
-dotenv.config(); // Ensure your environment variables are loaded
 
 const app: Express = require('./index').app; // Adjust the path to where your Express app is exported
 

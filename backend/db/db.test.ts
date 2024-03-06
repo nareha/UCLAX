@@ -1,4 +1,4 @@
-import { addUser, querySubmissions } from './db'; // adjust the import path according to your project structure
+import { addUser, querySubmissions } from './db';
 
 describe('Database Operations', () => {
 
@@ -6,6 +6,12 @@ describe('Database Operations', () => {
     const email = "sorrow@ucla.edu";
     const message = await addUser(email);
     expect(message).toMatch(/has been added to the database/);
+  });
+
+  test('do not allow adding a user twice', async () => {
+    const email = "sorrow@ucla.edu";
+    const message = await addUser(email);
+    expect(message).toMatch(/already exists/);
   });
 
   test('querySubmissions retrieves submissions successfully', async () => {
