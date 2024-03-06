@@ -5,7 +5,7 @@ enum Location {
     LAX = "LAX",
     UCLA = "UCLA",
     BUR = "BUR"
-  }
+}
 
 const app: Express = require('./index').app; // Adjust the path to where your Express app is exported
 
