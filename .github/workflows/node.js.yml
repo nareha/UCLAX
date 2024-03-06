@@ -30,7 +30,7 @@ jobs:
           backend/package-lock.json
           frontend/package-lock.json
     - run: npm --prefix ./backend ci
-    # - run: npm --prefix ./backend test
+    - run: npm --prefix ./backend test
     - run: npm --prefix ./frontend ci
     - run: npm --prefix ./frontend run build --if-present
     # - run: npm --prefix ./frontend test
