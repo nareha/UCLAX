@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import type { Submission } from "./structures";
 
-import { formatDate } from "./utils";
+import { formatDate, scanMatches } from "./utils";
 import { addSubmission, querySubmissions, addUser } from "../db/db";
 
 dotenv.config();
@@ -37,6 +37,18 @@ app.post("/submission", (req: Request, res: Response) => {
 
   console.log("Received: ", submission);
   res.send('Mickey has acknowledged your POST request. Have a wonderful day!');
+
+  const submissionsPromise = querySubmissions();
+  let submissions: Submission[] = [];
+  submissionsPromise.then((result) => {
+    result.forEach((submission) => {
+      submission.early_time = formatDate(new Date(submission.early_time));
+      submission.late_time = formatDate(new Date(submission.late_time));
+    });
+    submissions = result;
+  });
+  let matches: Submission[] = scanMatches(submission, submissions);
+  console.log("Matches: ", matches);
 });
 
 app.post("/user", (req: Request, res: Response) => {

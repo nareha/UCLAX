@@ -17,7 +17,7 @@ export function formatDate(dateObject: Date) {
     return formattedDate;
 }
 
-function scanMatches(submission: Submission, table: Submission[]): Submission[] {
+export function scanMatches(submission: Submission, table: Submission[]): Submission[] {
     // two submisions match if they have matching sources and destinations AND
     // their leave intervals overlap
     const matches = table.filter((row) => {
