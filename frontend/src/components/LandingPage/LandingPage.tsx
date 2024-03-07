@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 
+import {Location, Submission} from '../../structures';
+
 import LoginFailToast from '../LoginFailToast/LoginFailToast';
 import './LandingPage.css';
 
@@ -10,22 +12,6 @@ const apiCall = () => {
     console.log(data.data);
   })
 }
-
-enum Location {
-  LAX = "LAX",
-  UCLA = "UCLA",
-  BUR = "BUR"
-}
-
-type Submission = {
-  userid: number;
-  interval_start: Date;
-  interval_end: Date;
-  source: Location;
-  destination: Location;
-  contact: string;
-  max_group_size?: number;
-};
 
 const postCall = () => {
   // Example data - random interval_start, interval_end, destination, and contact
