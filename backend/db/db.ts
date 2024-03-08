@@ -91,7 +91,7 @@ export async function addUser(email: string): Promise<[string, Number | undefine
  * 
  * @param submission the submission to be added to the table
  */
-export function addSubmission(submission: Submission) {
+export function addSubmission(submission: Submission): Number {
   // check for erroneous inputs, throw error if found
   if (submission.interval_start > submission.interval_end) {
     throw new Error("Invalid start and end times.");
@@ -128,6 +128,7 @@ export function addSubmission(submission: Submission) {
       console.log('Inserted new row for user ', submission.userid);
     }
   });
+  return 1;
 }
 
 // TODO(joycetung): implement filtering support.
