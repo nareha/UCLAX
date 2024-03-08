@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 
@@ -33,7 +33,7 @@ const postCall = () => {
     });
 }
 
-const addUser = () => {
+const addUserEx = () => {
   const payload = {
     email: "mick@ucla.edu"
   };
@@ -47,6 +47,21 @@ const addUser = () => {
     });
 }
 
+const addUser = async (user_email: string): Promise<number> => {
+  let userid: number = -1;
+  await axios.post('http://localhost:9000/user', {email: user_email})
+    .then(response => {
+      console.log(response.data[0]);
+      console.log(response.data[1]);
+      userid = response.data[1];
+    })
+    .catch(error => {
+      console.error('Error adding user:', error);
+      console.log("Your request was: ", {email: user_email});
+    });
+  return userid;
+}
+
 interface Verification {
   isVerified: boolean;
   verify: () => void;
@@ -56,6 +71,11 @@ interface Verification {
 const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
+  const [userId, setUserId] = useState(-1);
+
+  useEffect(() => {
+    localStorage.setItem("userId", userId.toString());
+  }, [userId]);
 
   let userInfo = {
     email:"",
@@ -98,6 +118,11 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
       }
 
       verify();
+
+      const userIdPromise = addUser(userInfo.email);
+      userIdPromise.then((result) => {
+        setUserId(result);
+      });
     },
     onError: errorResponse => {
       setAlertText("Login failed, please try again.");
@@ -112,19 +137,19 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
         <div className="title-text">
           <h1>UC LAX</h1>
         </div>
-        <div className="description">  
-            {!isVerified && 
-              <>
-              <p>Verify to start moving</p>
-              <button onClick={ () => googleLogin() }>Sign in with Google</button>
-              </>
-            }
+        <div className="description">
+          {!isVerified && 
+            <>
+            <p>Verify to start moving</p>
+            <button onClick={ () => googleLogin() }>Sign in with Google</button>
+            </>
+          }
         </div>
       </div>
 
       <button onClick={apiCall}>Get a message from Mickey!</button>
       <button onClick={postCall}>Send a sample message to Mickey!</button>
-      <button onClick={addUser}>Add Mickey as a user to the database!</button>
+      <button onClick={addUserEx}>Add Mickey as a user to the database!</button>
     </div>
   );
 }

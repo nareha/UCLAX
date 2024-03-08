@@ -62,27 +62,27 @@ async function findUserByEmail(email: string): Promise<User | null> {
   }
 }
 
-export async function addUser(email: string): Promise<string> {
+export async function addUser(email: string): Promise<[string, Number | undefined]> {
   console.log("Checking if user is already in db");
 
   const existingUser = await findUserByEmail(email);
   if (existingUser) {
-    return `This user already exists with an id of ${existingUser.user_id}.`;
+    return [`This user already exists with an id of ${existingUser.user_id}.`, existingUser.user_id];
   }
 
   console.log("User not in db, adding");
-  const insertUserQuery = 'INSERT INTO users (email) VALUES (?)';
+  const insertUserQuery = 'INSERT INTO users (email) VALUES (?) RETURNING user_id';
   try {
-    await new Promise<void>((resolve, reject) => {
-      db.run(insertUserQuery, [email], function(err) {
+    const row = await new Promise<any>((resolve, reject) => {
+      db.get(insertUserQuery, [email], function(err, row) {
         if (err) reject(err);
-        else resolve();
+        else resolve(row as Number);
       });
     });
-    return `User with email ${email} has been added to the database.`;
+    return [`User with email ${email} has been added to the database.`, row.user_id];
   } catch (error) {
     console.error('Error adding user:', error);
-    return 'Error adding user to the database.';
+    return ['Error adding user to the database.', -1];
   }
 }
 
