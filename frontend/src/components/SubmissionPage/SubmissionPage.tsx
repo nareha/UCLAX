@@ -27,7 +27,7 @@ const SubmissionPage: React.FC = () => {
   });
 
   const validateForm = (): FormErrors => {
-    let errors: FormErrors = {};
+    const errors: FormErrors = {};
     if (Date.parse(formData.interval_start) > Date.parse(formData.interval_end)) {
       errors.interval = "Please enter a valid start and end time.";
     }
@@ -45,12 +45,12 @@ const SubmissionPage: React.FC = () => {
   const handleSubmit = (event: any) => {
     event.preventDefault();
     console.log(formData);
-    let formErrors: FormErrors = validateForm();
+    const formErrors: FormErrors = validateForm();
     if (formErrors.interval || formErrors.missing_field) {
       console.log("Please fix your errors", formErrors);
       return;
     }
-    let submission: Submission = {
+    const submission: Submission = {
       "userid": Number(localStorage.getItem("userId")),
       "interval_start": new Date(formData.interval_start),
       "interval_end": new Date(formData.interval_end),
