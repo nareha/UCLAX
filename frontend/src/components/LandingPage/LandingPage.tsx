@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
 
@@ -71,11 +71,11 @@ interface Verification {
 const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
-  const [userId, setUserId] = useState(-1);
+  // const [userId, setUserId] = useState(-1);
 
-  useEffect(() => {
-    localStorage.setItem("userId", userId.toString());
-  }, [userId]);
+  // useEffect(() => {
+  //   localStorage.setItem("userId", userId.toString());
+  // }, [userId]);
 
   let userInfo = {
     email:"",
@@ -121,7 +121,7 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
 
       const userIdPromise = addUser(userInfo.email);
       userIdPromise.then((result) => {
-        setUserId(result);
+        localStorage.setItem("userId", result.toString());
       });
     },
     onError: errorResponse => {
