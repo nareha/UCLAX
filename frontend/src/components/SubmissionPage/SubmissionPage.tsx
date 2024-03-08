@@ -15,6 +15,7 @@ const postSubmission = (submissionData: Submission) => {
 }
 
 const SubmissionPage: React.FC = () => {
+  type FormErrors = Partial<Record<'interval' | 'missing_field', string>>
 
   const [formData, setFormData] = useState({
     "interval_start": "",
@@ -25,6 +26,17 @@ const SubmissionPage: React.FC = () => {
     "max_group_size": undefined
   });
 
+  const validateForm = (): FormErrors => {
+    let errors: FormErrors = {};
+    if (Date.parse(formData.interval_start) > Date.parse(formData.interval_end)) {
+      errors.interval = "Please enter a valid start and end time.";
+    }
+    if (!formData.contact) {
+      errors.missing_field = "Missing required field. Required fields are earliest/latest time, source, destination, and contact."
+    }
+    return errors;
+  }
+
   const handleChange = (event: any) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
@@ -33,6 +45,11 @@ const SubmissionPage: React.FC = () => {
   const handleSubmit = (event: any) => {
     event.preventDefault();
     console.log(formData);
+    let formErrors: FormErrors = validateForm();
+    if (formErrors.interval || formErrors.missing_field) {
+      console.log("Please fix your errors", formErrors);
+      return;
+    }
     let submission: Submission = {
       "userid": Number(localStorage.getItem("userId")),
       "interval_start": new Date(formData.interval_start),
