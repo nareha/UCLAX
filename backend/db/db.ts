@@ -97,14 +97,37 @@ export function addSubmission(submission: Submission) {
     throw new Error("Invalid start and end times.");
   }
 
-  // prepare and run the statement
-  let stmt = db.prepare(`INSERT INTO submissions(user_id, early_time, \
-    late_time, source, destination, contact, max_group_size) \
-    VALUES (?, ?, ?, ?, ?, ?, ?)`);
-  stmt.run(submission.userid, submission.interval_start,
-    submission.interval_end, submission.source, submission.destination,
-    submission.contact, submission.max_group_size);
-  stmt.finalize();
+  // try to update the user's submission first. if it doesn't
+  // exist, insert a new row instead
+  const rowsUpdated = new Promise<number>((resolve, reject) => {
+    db.run("UPDATE submissions SET early_time = ?, late_time = ?, \
+      source = ?, destination = ?, contact = ?, max_group_size = ?\
+      WHERE user_id = ?",
+      [submission.interval_start, submission.interval_end, submission.source, submission.destination, submission.contact, submission.max_group_size, submission.userid],
+      function (err) {
+        if (err) {
+          reject(err);
+          // throw new Error("Database error");
+        } else {
+          console.log(`Updated submission for user ${submission.userid}, ${this.changes} rows affected.`);
+          resolve(this.changes);
+        }
+      }
+    );
+  });
+
+  rowsUpdated.then((rowsChanged) => {
+    if (rowsChanged === 0) {
+      const insertStmt = db.prepare(`INSERT INTO submissions(user_id, early_time, \
+        late_time, source, destination, contact, max_group_size) \
+        VALUES (?, ?, ?, ?, ?, ?, ?)`);
+      insertStmt.run(submission.userid, submission.interval_start,
+        submission.interval_end, submission.source, submission.destination,
+        submission.contact, submission.max_group_size);
+      insertStmt.finalize();
+      console.log('Inserted new row for user ', submission.userid);
+    }
+  });
 }
 
 // TODO(joycetung): implement filtering support.
