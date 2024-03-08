@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 import { Location, Submission } from '../../structures';
+import AWS from 'aws-sdk';
 
 import './SubmissionPage.css';
+
+//The accessKeyId, secretAccessKey, and sessionToken expire after 12 hours and must be re-retrieved from the AWS Access Portal.
+AWS.config.update({
+  apiVersion: "2010-12-01",
+  accessKeyId: "",
+  secretAccessKey: "",
+  sessionToken: "",
+  region: "us-east-2"
+});
 
 const postSubmission = (submissionData: Submission) => {
   axios.post('http://localhost:9000/submission', submissionData)
