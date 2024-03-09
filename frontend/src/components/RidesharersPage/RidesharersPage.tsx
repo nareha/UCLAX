@@ -107,8 +107,10 @@ const RidesharersPage: React.FC = () => {
   }
 
   const resetGrid = () => {
-    const selects = document.getElementById("source") as HTMLSelectElement;
-    Array.from(selects.options).filter(function (option) {option.selected = true;})
+    const sources = document.getElementById("source") as HTMLSelectElement;
+    Array.from(sources.options).filter(function (option) {option.selected = true;})
+    const dests = document.getElementById("dest") as HTMLSelectElement;
+    Array.from(dests.options).filter(function (option) {option.selected = true;})
     setProcessedRidershares(tempRidesharers)
   }
 
