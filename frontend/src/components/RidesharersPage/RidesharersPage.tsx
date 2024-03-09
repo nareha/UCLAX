@@ -3,7 +3,6 @@ import axios from 'axios';
 import Grid from '@mui/material/Grid';
 
 import InfoBox, { Info } from '../InfoBox/InfoBox';
-import { getSupportedCodeFixes } from 'typescript';
 
 const RidesharersPage: React.FC = () => {
   const [ridesharers, setRidesharers] = useState<Info[]>([]);
@@ -72,17 +71,6 @@ const RidesharersPage: React.FC = () => {
     }
   ];
 
-  // export interface Info {
-  //   contact: string;
-  //   source: "UCLA" | "LAX" | "BUR";
-  //   destination: "UCLA" | "LAX" | "BUR";
-  //   early_time: string;
-  //   late_time: string;
-  //   maxParty?: number;
-  // }
-
-  // tempRidesharers.sort(reverse=True, key = lambda x: x[N])
-  // const idk = sorted(tempRidesharers, key=lambda tup: tup[1])
   const filterRides = () => {
     const sources = (document.getElementById("source") as HTMLSelectElement);
     const selectedSources = Array.from(sources.options).filter(function (option) {
@@ -98,20 +86,13 @@ const RidesharersPage: React.FC = () => {
       return option.value;
     });
 
-    console.log(selectedSources);
-    console.log(selectedDests);
-    console.log(tempRidesharers)
     const filtered = tempRidesharers.filter(({source, destination}) => selectedSources.includes(source) && selectedDests.includes(destination));
-    console.log(filtered)
     setProcessedRidershares(filtered);
-    console.log()
   }
 
   const sortRides = () => {
     const sortTime = document.getElementById("sortTime") as HTMLSelectElement;
-    console.log(sortTime.value)
     const sortAscending = (document.getElementById("sortOrder") as HTMLSelectElement).value == "ascending" ? true : false;
-    console.log(sortAscending)
 
     let sorted; 
     if (sortTime.value == "early"){
@@ -123,7 +104,6 @@ const RidesharersPage: React.FC = () => {
     
     if (!sortAscending){sorted.reverse()}
     setProcessedRidershares(sorted)
-    console.log(processedRidershares)
   }
 
   const resetGrid = () => {
