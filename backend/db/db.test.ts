@@ -11,13 +11,15 @@ describe('Database Operations', () => {
   test('addUser adds a user successfully', async () => {
     const email = "sorrow@ucla.edu";
     const message = await addUser(email);
-    expect(message).toMatch(/has been added to the database/);
+    expect(message).toBeInstanceOf(Array);
+    expect(message[1]).not.toEqual(-1);
   });
 
   test('do not allow adding a user twice', async () => {
     const email = "sorrow@ucla.edu";
     const message = await addUser(email);
-    expect(message).toMatch(/already exists/);
+    expect(message).toBeInstanceOf(Array);
+    expect(message[0]).toMatch(/already exists/);
   });
 
   test('add a submission successfully', async () => {
@@ -35,7 +37,7 @@ describe('Database Operations', () => {
 
   test('querySubmissions retrieves submissions successfully', async () => {
     const submissions : any = querySubmissions();
-    await submissions.then((result: any[]) => {
+    await submissions.then((result: any) => {
         expect(result).not.toHaveLength(0);
         result.forEach((submission : any) => {
             expect(submission).toHaveProperty('user_id');
