@@ -8,10 +8,10 @@ export interface Info {
   destination: "UCLA" | "LAX" | "BUR";
   early_time: string;
   late_time: string;
-  maxParty?: number;
+  max_group_size?: number;
 }
 
-const InfoBox: React.FC<Info> = ({contact, source, destination, early_time, late_time, maxParty}: Info) => {
+const InfoBox: React.FC<Info> = ({contact, source, destination, early_time, late_time, max_group_size}: Info) => {
   return (
     <Card>
       <CardContent style={{wordWrap: "break-word"}}>
@@ -24,9 +24,9 @@ const InfoBox: React.FC<Info> = ({contact, source, destination, early_time, late
         <Typography>
           Arrival Time: {early_time} - {late_time}
         </Typography>
-        {maxParty &&
+        {max_group_size &&
           <Typography>
-            Max Party of {maxParty}
+            Max Party of {max_group_size}
           </Typography>
         }
       </CardContent>

@@ -71,7 +71,7 @@ const RidesharersPage: React.FC = () => {
   }
 
   const updateGrid = (ridesharers : Info[]) => {
-    return ridesharers.map(({ contact, source, destination, early_time, late_time, maxParty }) => (
+    return ridesharers.map(({ contact, source, destination, early_time, late_time, max_group_size }) => (
       <Grid style={{ display: 'flex' }} item xs={12} md={6} lg={4} key={contact}>
         <InfoBox
           contact={contact}
@@ -79,7 +79,7 @@ const RidesharersPage: React.FC = () => {
           destination={destination}
           early_time={early_time}
           late_time={late_time}
-          maxParty={maxParty}
+          max_group_size={max_group_size}
         />
       </Grid>
     ));
