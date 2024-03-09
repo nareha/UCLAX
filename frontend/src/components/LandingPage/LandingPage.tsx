@@ -71,11 +71,6 @@ interface Verification {
 const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
-  // const [userId, setUserId] = useState(-1);
-
-  // useEffect(() => {
-  //   localStorage.setItem("userId", userId.toString());
-  // }, [userId]);
 
   let userInfo = {
     email:"",

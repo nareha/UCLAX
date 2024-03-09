@@ -107,7 +107,6 @@ export async function addSubmission(submission: Submission): Promise<Number> {
       function (err) {
         if (err) {
           reject(err);
-          // throw new Error("Database error");
         } else {
           console.log(`Updated submission for user ${submission.userid}, ${this.changes} rows affected.`);
           resolve(this.changes);
@@ -131,7 +130,6 @@ export async function addSubmission(submission: Submission): Promise<Number> {
   return new Promise<number>((resolve, reject) => {resolve(1)});
 }
 
-// TODO(joycetung): implement filtering support.
 /**
  * Queries the submission table and returns all results
  * 
