@@ -24,57 +24,8 @@ const RidesharersPage: React.FC = () => {
       setProcessedRidershares(sortRides(filterRides(ridesharers)));
     }
     getRidesharers();
-    setProcessedRidershares(ridesharers);
     updateRides();
   }, [ridesharers])
-  
-  // const tempDate: string = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-  // const date1: string =  new Date('March 9, 2024 01:30:00').toLocaleString(); 
-  // const date2: string =  new Date('March 9, 2024 02:30:00').toLocaleString();
-  // const date3: string =  new Date('March 9, 2024 03:30:00').toLocaleString();
-  // const date4: string =  new Date('March 9, 2024 04:30:00').toLocaleString();
-  // const date5: string =  new Date('March 9, 2024 10:30:00').toLocaleString();
-  // const date6: string =  new Date('March 9, 2024 16:30:00').toLocaleString();
-  // const date7: string =  new Date('March 9, 2024 18:30:00').toLocaleString();
-  // const tempRidesharers: Array<Info> = [
-  //   {
-  //     contact: "Instagram @mickeymouse",
-  //     source: "UCLA",
-  //     destination: "LAX",
-  //     early_time: date1,
-  //     late_time: date2
-  //   },
-  //   {
-  //     contact: "Phone (555) 555-5555",
-  //     source: "BUR",
-  //     destination: "UCLA",
-  //     early_time: date2,
-  //     late_time: date3
-  //   },
-  //   {
-  //     contact: "Email midnightrider@gmail.com",
-  //     source: "BUR",
-  //     destination: "UCLA",
-  //     early_time: date1,
-  //     late_time: date4
-  //   },
-  //   {
-  //     contact: "Email gertrude@pm.me",
-  //     source: "LAX",
-  //     destination: "UCLA",
-  //     early_time: date4,
-  //     late_time: date5,
-  //     maxParty: 5
-  //   },
-  //   {
-  //     contact: "Instagram @bruwuins",
-  //     source: "UCLA",
-  //     destination: "BUR",
-  //     early_time: date5,
-  //     late_time: date7
-  //   }
-  // ];
-
 
   const filterRides = (rides : Info[]) => {
     const sources = (document.getElementById("source") as HTMLSelectElement);
