@@ -21,7 +21,8 @@ const RidesharersPage: React.FC = () => {
 
   useEffect(() => {
     getRidesharers();
-    setProcessedRidershares(ridesharers); 
+    setProcessedRidershares(ridesharers);
+    updateRides();
   }, [ridesharers])
   
   // const tempDate: string = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
@@ -71,7 +72,11 @@ const RidesharersPage: React.FC = () => {
   //   }
   // ];
 
-  const filterRides = () => {
+  const updateRides = () => {
+    setProcessedRidershares(sortRides(filterRides(ridesharers)));
+  }
+
+  const filterRides = (rides : Info[]) => {
     const sources = (document.getElementById("source") as HTMLSelectElement);
     const selectedSources = Array.from(sources.options).filter(function (option) {
       return option.selected;
@@ -86,31 +91,31 @@ const RidesharersPage: React.FC = () => {
       return option.value;
     });
 
-    const filtered = ridesharers.filter(({source, destination}) => selectedSources.includes(source) && selectedDests.includes(destination));
-    setProcessedRidershares(filtered);
+    const filtered = rides.filter(({source, destination}) => selectedSources.includes(source) && selectedDests.includes(destination));
+    return filtered;
   }
 
-  const sortRides = () => {
+  const sortRides = (rides : Info[]) => {
     const sortTime = document.getElementById("sortTime") as HTMLSelectElement;
-    const sortAscending = (document.getElementById("sortOrder") as HTMLSelectElement).value == "ascending" ? true : false;
+    const sortAscending = (document.getElementById("sortOrder") as HTMLSelectElement).value === "ascending" ? true : false;
 
     let sorted; 
-    if (sortTime.value == "early"){
-      sorted = processedRidershares.slice().sort((a, b) => (new Date(a.early_time).valueOf() - new Date(b.early_time).valueOf()));
+    if (sortTime.value === "early"){
+      sorted = rides.slice().sort((a, b) => (new Date(a.early_time).valueOf() - new Date(b.early_time).valueOf()));
     }
     else{
-      sorted = processedRidershares.slice().sort((a, b) => (new Date(a.late_time).valueOf() - new Date(b.late_time).valueOf()));
+      sorted = rides.slice().sort((a, b) => (new Date(a.late_time).valueOf() - new Date(b.late_time).valueOf()));
     }
     
     if (!sortAscending){sorted.reverse()}
-    setProcessedRidershares(sorted)
+    return sorted
   }
 
   const resetGrid = () => {
     const sources = document.getElementById("source") as HTMLSelectElement;
-    Array.from(sources.options).filter(function (option) {option.selected = true;})
+    Array.from(sources.options).filter(function (option) {return option.selected = true;})
     const dests = document.getElementById("dest") as HTMLSelectElement;
-    Array.from(dests.options).filter(function (option) {option.selected = true;})
+    Array.from(dests.options).filter(function (option) {return option.selected = true;})
     setProcessedRidershares(ridesharers)
   }
 
@@ -148,7 +153,7 @@ const RidesharersPage: React.FC = () => {
           </select>
         </form>
         <button onClick={resetGrid}>Reset</button>
-        <button onClick={filterRides}>Filter</button>
+        {/* <button onClick={filterRides}>Filter</button> */}
       </div>
       <div>
         <form>
@@ -164,7 +169,7 @@ const RidesharersPage: React.FC = () => {
             <option value="descending">Descending</option>
           </select>
         </form>
-        <button onClick={sortRides}>Sort</button>
+        {/* <button onClick={sortRides}>Sort</button> */}
       </div>
     <Grid style={{margin: "auto", width: "80%"}} container spacing={4}>
           {updateGrid(processedRidershares)}
