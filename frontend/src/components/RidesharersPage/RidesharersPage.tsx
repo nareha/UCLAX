@@ -20,6 +20,9 @@ const RidesharersPage: React.FC = () => {
   }
 
   useEffect(() => {
+    const updateRides = () => {
+      setProcessedRidershares(sortRides(filterRides(ridesharers)));
+    }
     getRidesharers();
     setProcessedRidershares(ridesharers);
     updateRides();
@@ -72,9 +75,6 @@ const RidesharersPage: React.FC = () => {
   //   }
   // ];
 
-  const updateRides = () => {
-    setProcessedRidershares(sortRides(filterRides(ridesharers)));
-  }
 
   const filterRides = (rides : Info[]) => {
     const sources = (document.getElementById("source") as HTMLSelectElement);
