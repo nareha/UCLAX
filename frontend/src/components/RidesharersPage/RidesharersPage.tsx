@@ -22,6 +22,7 @@ const RidesharersPage: React.FC = () => {
 
   useEffect(() => {
     getRidesharers();
+    setProcessedRidershares(tempRidesharers); //tbh not entirely sure how this will be affected once we have actual data
   }, [])
   
   const tempDate: string = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
@@ -103,15 +104,31 @@ const RidesharersPage: React.FC = () => {
     const filtered = tempRidesharers.filter(({source, destination}) => selectedSources.includes(source) && selectedDests.includes(destination));
     console.log(filtered)
     setProcessedRidershares(filtered);
-    console.log(processedRidershares)
-    // updateGrid(filtered);
+    console.log()
   }
 
   const sortRides = () => {
+    const sortTime = document.getElementById("sortTime") as HTMLSelectElement;
+    console.log(sortTime.value)
+    const sortAscending = (document.getElementById("sortOrder") as HTMLSelectElement).value == "ascending" ? true : false;
+    console.log(sortAscending)
+
+    let sorted; 
+    if (sortTime.value == "early"){
+      sorted = processedRidershares.slice().sort((a, b) => (new Date(a.early_time).valueOf() - new Date(b.early_time).valueOf()));
+    }
+    else{
+      sorted = processedRidershares.slice().sort((a, b) => (new Date(a.late_time).valueOf() - new Date(b.late_time).valueOf()));
+    }
     
+    if (!sortAscending){sorted.reverse()}
+    setProcessedRidershares(sorted)
+    console.log(processedRidershares)
   }
 
   const resetGrid = () => {
+    const selects = document.getElementById("source") as HTMLSelectElement;
+    Array.from(selects.options).filter(function (option) {option.selected = true;})
     setProcessedRidershares(tempRidesharers)
   }
 
@@ -147,24 +164,23 @@ const RidesharersPage: React.FC = () => {
             <option value="UCLA" selected>UCLA</option>
             <option value="BUR" selected>BUR</option>
           </select>
-          <input type="reset" value="Reset" onClick={resetGrid}/>
         </form>
+        <button onClick={resetGrid}>Reset</button>
         <button onClick={filterRides}>Filter</button>
       </div>
       <div>
         <form>
           <label>Sort By: </label>
-          <select id="sort" >
+          <select id="sortTime" >
             <option value="early">Early Time</option>
             <option value="late">Late Time</option>
           </select>
 
           <label>Order: </label>
-          <select id="order" >
+          <select id="sortOrder" >
             <option value="ascending">Ascending</option>
-            <option value="descending">Descendinge</option>
+            <option value="descending">Descending</option>
           </select>
-          <input type="reset" value="Reset" />
         </form>
         <button onClick={sortRides}>Sort</button>
       </div>
