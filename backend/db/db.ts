@@ -91,7 +91,7 @@ export async function addUser(email: string): Promise<[string, Number | undefine
  * 
  * @param submission the submission to be added to the table
  */
-export function addSubmission(submission: Submission): Number {
+export async function addSubmission(submission: Submission): Promise<Number> {
   // check for erroneous inputs, throw error if found
   if (submission.interval_start > submission.interval_end) {
     throw new Error("Invalid start and end times.");
@@ -116,7 +116,7 @@ export function addSubmission(submission: Submission): Number {
     );
   });
 
-  rowsUpdated.then((rowsChanged) => {
+  await rowsUpdated.then((rowsChanged) => {
     if (rowsChanged === 0) {
       const insertStmt = db.prepare(`INSERT INTO submissions(user_id, early_time, \
         late_time, source, destination, contact, max_group_size) \
@@ -128,7 +128,7 @@ export function addSubmission(submission: Submission): Number {
       console.log('Inserted new row for user ', submission.userid);
     }
   });
-  return 1;
+  return new Promise<number>((resolve, reject) => {resolve(1)});
 }
 
 // TODO(joycetung): implement filtering support.
