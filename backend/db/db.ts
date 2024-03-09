@@ -48,27 +48,27 @@ async function findUserByEmail(email: string): Promise<User | null> {
   }
 }
 
-export async function addUser(email: string): Promise<string> {
+export async function addUser(email: string): Promise<[string, Number | undefined]> {
   console.log("Checking if user is already in db");
 
   const existingUser = await findUserByEmail(email);
   if (existingUser) {
-    return `This user already exists with an id of ${existingUser.user_id}.`;
+    return [`This user already exists with an id of ${existingUser.user_id}.`, existingUser.user_id];
   }
 
   console.log("User not in db, adding");
-  const insertUserQuery = 'INSERT INTO users (email) VALUES (?)';
+  const insertUserQuery = 'INSERT INTO users (email) VALUES (?) RETURNING user_id';
   try {
-    await new Promise<void>((resolve, reject) => {
-      db.run(insertUserQuery, [email], function(err) {
+    const row = await new Promise<any>((resolve, reject) => {
+      db.get(insertUserQuery, [email], function(err, row) {
         if (err) reject(err);
-        else resolve();
+        else resolve(row as Number);
       });
     });
-    return `User with email ${email} has been added to the database.`;
+    return [`User with email ${email} has been added to the database.`, row.user_id];
   } catch (error) {
     console.error('Error adding user:', error);
-    return 'Error adding user to the database.';
+    return ['Error adding user to the database.', -1];
   }
 }
 
@@ -77,20 +77,43 @@ export async function addUser(email: string): Promise<string> {
  * 
  * @param submission the submission to be added to the table
  */
-export function addSubmission(submission: Submission) {
+export async function addSubmission(submission: Submission): Promise<Number> {
   // check for erroneous inputs, throw error if found
   if (submission.interval_start > submission.interval_end) {
     throw new Error("Invalid start and end times.");
   }
 
-  // prepare and run the statement
-  let stmt = db.prepare(`INSERT INTO submissions(user_id, early_time, \
-    late_time, source, destination, contact, max_group_size) \
-    VALUES (?, ?, ?, ?, ?, ?, ?)`);
-  stmt.run(submission.userid, submission.interval_start,
-    submission.interval_end, submission.source, submission.destination,
-    submission.contact, submission.max_group_size);
-  stmt.finalize();
+  // try to update the user's submission first. if it doesn't
+  // exist, insert a new row instead
+  const rowsUpdated = new Promise<number>((resolve, reject) => {
+    db.run("UPDATE submissions SET early_time = ?, late_time = ?, \
+      source = ?, destination = ?, contact = ?, max_group_size = ?\
+      WHERE user_id = ?",
+      [submission.interval_start, submission.interval_end, submission.source, submission.destination, submission.contact, submission.max_group_size, submission.userid],
+      function (err) {
+        if (err) {
+          reject(err);
+        } else {
+          console.log(`Updated submission for user ${submission.userid}, ${this.changes} rows affected.`);
+          resolve(this.changes);
+        }
+      }
+    );
+  });
+
+  await rowsUpdated.then((rowsChanged) => {
+    if (rowsChanged === 0) {
+      const insertStmt = db.prepare(`INSERT INTO submissions(user_id, early_time, \
+        late_time, source, destination, contact, max_group_size) \
+        VALUES (?, ?, ?, ?, ?, ?, ?)`);
+      insertStmt.run(submission.userid, submission.interval_start,
+        submission.interval_end, submission.source, submission.destination,
+        submission.contact, submission.max_group_size);
+      insertStmt.finalize();
+      console.log('Inserted new row for user ', submission.userid);
+    }
+  });
+  return new Promise<number>((resolve, reject) => {resolve(1)});
 }
 
 /**

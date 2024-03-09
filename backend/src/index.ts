@@ -33,10 +33,9 @@ app.post("/submission", (req: Request, res: Response) => {
   //make sure that the body of the request has the data that we want
   //parse the body of the request and store as a Submission
   let submission: Submission = req.body;
-  addSubmission(submission);
-
-  console.log("Received: ", submission);
-  res.send('Mickey has acknowledged your POST request. Have a wonderful day!');
+  addSubmission(submission).then((result) => {
+    console.log("Received: ", submission);
+    res.send('Mickey has acknowledged your POST request. Have a wonderful day!');
 
   const submissionsPromise = querySubmissions();
   let submissions: Submission[] = [];
@@ -49,6 +48,7 @@ app.post("/submission", (req: Request, res: Response) => {
   });
   let matches: Submission[] = scanMatches(submission, submissions);
   console.log("Matches: ", matches);
+  });
 });
 
 app.post("/user", (req: Request, res: Response) => {
@@ -66,3 +66,5 @@ app.post("/user", (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+
+export { app };
