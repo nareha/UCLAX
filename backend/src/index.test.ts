@@ -39,7 +39,7 @@ describe('Express Server Endpoints', () => {
         .post('/submission')
         .send(submission);
       expect(response.statusCode).toBe(200);
-      expect(response.text).toContain('Mickey has acknowledged your POST request. Have a wonderful day!');
+      expect((await response.request).body).toBeInstanceOf(Array);
     });
   });
 

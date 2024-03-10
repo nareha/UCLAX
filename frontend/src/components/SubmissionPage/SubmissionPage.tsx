@@ -108,7 +108,88 @@ const SubmissionPage: React.FC = () => {
       "contact": formData.contact,
       "max_group_size": formData.max_group_size
     };
-    postSubmission(submission);
+    
+    axios.post('http://localhost:9000/submission', submission)
+    .then(response => {
+      const matches = response.data;
+      const matchingEmails: string[] = matches.map((user: {email: string}) => user.email);
+      console.log(matchingEmails);
+      axios.get('http://localhost:9000/email', {params: {user_id: String(submission.userid)} })
+      .then(response => {
+        let userEmail = response.data[0].email;
+        if(userEmail.length >= 10 && userEmail.substring(userEmail.length-10) === "g.ucla.edu"){
+          userEmail = userEmail.substring(0, userEmail.length-10) + "ucla.edu";
+        }
+
+        let emailString = "";
+        matchingEmails.push(userEmail);
+        matchingEmails.forEach(function(currEmail){
+          let emailBody = ""
+          if(currEmail!==userEmail){
+            emailString += currEmail + ", ";
+            emailBody = "You have been matched with user " + userEmail + " through UCLAX for a ridshare. Please contact them if you'd like to set up plans."
+          }
+          else{
+            if(emailString.length!==0){
+              emailString = emailString.substring(0, emailString.length-2);
+              emailBody = "You have been matched with user(s) " + emailString + " through UCLAX for a ridshare. Please contact them if you'd like to set up plans."
+            }
+            else{
+              emailBody = "You have receieved no matches through UCLAX for a rideshare so far. We will notify you of matches in the future."
+            }
+          }
+          let emailInfo = {
+            Destination: {
+              CcAddresses: [
+              ],
+              ToAddresses: [
+                currEmail
+                //these must be verified emails in the AWS SES Portal.
+              ],
+            },
+            Message: {
+              Body: {
+                Html: {
+                  Charset: "UTF-8",
+                  Data: emailBody, //text for the body of the email
+                },
+                Text: {
+                  Charset: "UTF-8",
+                  Data: "",
+                },
+              },
+              Subject: {
+                Charset: "UTF-8",
+                Data: "UCLAX Match",
+              },
+            },
+            //these must be verified emails in the AWS SES Portal.
+            Source: "UCLAX130@gmail.com",
+            ReplyToAddresses: [
+              "UCLAX130@gmail.com",
+            ],
+          };
+          var sendPromise = new AWS.SES({ apiVersion: "2010-12-01" })
+          .sendEmail(emailInfo)
+          .promise();
+        
+          sendPromise
+          .then(function (data) {
+            console.log(data.MessageId);
+          })
+          .catch(function (err) {
+            console.error(err, err.stack);
+          });
+        })
+      })
+      .catch(error => {
+        console.error('Error retrieving user email:', error);
+      });
+    })
+    .catch(error => {
+      console.error('Error posting submission:', error);
+    });
+    
   };
 
   const [showSuccess, setShowSuccess] = useState(false);

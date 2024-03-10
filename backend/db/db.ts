@@ -135,3 +135,33 @@ export function querySubmissions(): Promise<any[]> {
     });
   });
 }
+
+export function querySubmissionsAndEmails(): Promise<any[]> {
+  return new Promise((resolve, reject) => {
+    let queryString: string = 'SELECT * FROM submissions JOIN users on submissions.user_id = users.user_id';
+    db.all(queryString, (err: Error | null, rows: Array<string>) => {
+      if (err) {
+        console.error(err.message);
+        reject(err);
+      } else {
+        console.log("Received: ", rows);
+        resolve(rows);
+      }
+    });
+  });
+}
+
+export function getEmail(user_id: Number): Promise<any[]> {
+  return new Promise((resolve, reject) => {
+    let queryString: string = 'SELECT * FROM users WHERE user_id = ? LIMIT 1';
+    db.all(queryString, user_id, (err: Error | null, rows: Array<string>) => {
+      if (err) {
+        console.error(err.message);
+        reject(err);
+      } else {
+        console.log("Received: ", rows);
+        resolve(rows);
+      }
+    });
+  });
+}

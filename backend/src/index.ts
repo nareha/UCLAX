@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import type { Submission } from "./structures";
 
 import { formatDate, scanMatches } from "./utils";
-import { addSubmission, querySubmissions, addUser } from "../db/db";
+import { addSubmission, querySubmissions, querySubmissionsAndEmails, getEmail, addUser } from "../db/db";
 
 dotenv.config();
 
@@ -29,19 +29,28 @@ app.get("/table", (req: Request, res: Response) => {
   });
 });
 
+app.get("/email", (req: Request, res: Response) => {
+  let param = req.query.user_id as string;
+  const submissionPromise = getEmail(parseInt(param));
+  submissionPromise.then((row) => {
+    res.send(row);
+  });
+});
+
 app.post("/submission", (req: Request, res: Response) => {
   //make sure that the body of the request has the data that we want
   //parse the body of the request and store as a Submission
   let submission: Submission = req.body;
   addSubmission(submission).then((result) => {
     console.log("Received: ", submission);
-    res.send('Mickey has acknowledged your POST request. Have a wonderful day!');
 
-    const submissionsPromise = querySubmissions();
+    const submissionsPromise = querySubmissionsAndEmails();
     submissionsPromise.then((submissions) => {
       const matches: Submission[] = scanMatches(submission, submissions);
       console.log("Matches: ", matches);
+      res.send(matches);
     });
+
   });
 });
 
