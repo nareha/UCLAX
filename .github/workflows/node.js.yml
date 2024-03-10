@@ -3,11 +3,7 @@
 
 name: Node.js CI
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: push
 
 jobs:
   build:
@@ -30,7 +26,26 @@ jobs:
           backend/package-lock.json
           frontend/package-lock.json
     - run: npm --prefix ./backend ci
-    # - run: npm --prefix ./backend test
     - run: npm --prefix ./frontend ci
     - run: npm --prefix ./frontend run build --if-present
+    # - run: npm --prefix ./frontend test
+
+  test:
+    name: tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: |
+          backend/package-lock.json
+          frontend/package-lock.json
+    - run: npm --prefix ./backend ci
+    - run: npm --prefix ./backend test
+    # - run: npm --prefix ./frontend ci
+    # - run: npm --prefix ./frontend run build --if-present
     # - run: npm --prefix ./frontend test

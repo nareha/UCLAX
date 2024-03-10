@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import type { Submission } from "./structures";
 
-import { formatDate } from "./utils";
+import { formatDate, scanMatches } from "./utils";
 import { addSubmission, querySubmissions, addUser } from "../db/db";
 
 dotenv.config();
@@ -33,10 +33,16 @@ app.post("/submission", (req: Request, res: Response) => {
   //make sure that the body of the request has the data that we want
   //parse the body of the request and store as a Submission
   let submission: Submission = req.body;
-  addSubmission(submission);
+  addSubmission(submission).then((result) => {
+    console.log("Received: ", submission);
+    res.send('Mickey has acknowledged your POST request. Have a wonderful day!');
 
-  console.log("Received: ", submission);
-  res.send('Mickey has acknowledged your POST request. Have a wonderful day!');
+    const submissionsPromise = querySubmissions();
+    submissionsPromise.then((submissions) => {
+      const matches: Submission[] = scanMatches(submission, submissions);
+      console.log("Matches: ", matches);
+    });
+  });
 });
 
 app.post("/user", (req: Request, res: Response) => {
@@ -54,3 +60,5 @@ app.post("/user", (req: Request, res: Response) => {
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });
+
+export { app };
