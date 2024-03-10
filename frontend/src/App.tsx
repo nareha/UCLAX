@@ -5,7 +5,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from './components/Navbar/Navbar';
 import LandingPage from './components/LandingPage/LandingPage';
 import RidesharersPage from './components/RidesharersPage/RidesharersPage';
-import ProfilePage from './components/ProfilePage/ProfilePage';
 import SubmissionPage from './components/SubmissionPage/SubmissionPage';
 import NotFoundPage from './components/404Page/404Page';
 
@@ -23,7 +22,6 @@ const App: React.FC = () => {
         <Routes>
   	      <Route path="/" element={<LandingPage isVerified={isVerified} verify={handleIsVerified} />} />
           <Route path="/ridesharers" element={isVerified ? <RidesharersPage /> : <Navigate to="/" />} />
-          <Route path="/profile" element={isVerified ? <ProfilePage /> : <Navigate to="/" />} />
           <Route path="/submit" element={isVerified ? <SubmissionPage /> : <Navigate to="/" />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

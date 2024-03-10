@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, Typography } from '@mui/material';
 
-// Interval start & end expect the Date object to already be converted to a string
+// early_time and late_time expect the Date object to already be converted to a string
 export interface Info {
   contact: string;
   source: "UCLA" | "LAX" | "BUR";
@@ -11,22 +11,33 @@ export interface Info {
   max_group_size?: number;
 }
 
+const headingColor = getComputedStyle(document.querySelector(':root')!).getPropertyValue('--main');
+const HeadingText: React.FC<{ text: string }> = ({text}: {text : string}) => <span style={{color: `${headingColor}`, fontWeight: "bold"}}>{text}</span>
+
 const InfoBox: React.FC<Info> = ({contact, source, destination, early_time, late_time, max_group_size}: Info) => {
   return (
     <Card>
       <CardContent style={{wordWrap: "break-word"}}>
         <Typography>
-          Contact Info: {contact} 
+          <HeadingText text="Contact Info: " />
+          {contact} 
         </Typography>
         <Typography>
-          Going from {source} to {destination}
+          <HeadingText text="Going from " />
+          {source}
+          <HeadingText text=" to " />
+          {destination}
         </Typography>
         <Typography>
-          Arrival Time: {early_time} - {late_time}
+          <HeadingText text="Depart between " />
+          {early_time}
+          <HeadingText text=" and " />
+          {late_time}
         </Typography>
         {max_group_size &&
           <Typography>
-            Max Party of {max_group_size}
+            <HeadingText text="Max Group Size of " />
+            {max_group_size}
           </Typography>
         }
       </CardContent>

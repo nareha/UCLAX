@@ -2,12 +2,13 @@ import React from 'react';
 import { Snackbar, Alert, AlertTitle } from '@mui/material';
 
 interface Failure {
+  alertType: "Login Error" | "Submission Error";
   showAlert: boolean;
   failMessage: string;
   closeAlert: () => void;
 }
 
-const LoginFailToast: React.FC<Failure> = ({showAlert, failMessage, closeAlert}: Failure) => {
+const FailToast: React.FC<Failure> = ({alertType, showAlert, failMessage, closeAlert}: Failure) => {
   return (
     <Snackbar
       anchorOrigin={{vertical: "bottom", horizontal: "right"}}
@@ -18,11 +19,11 @@ const LoginFailToast: React.FC<Failure> = ({showAlert, failMessage, closeAlert}:
         severity="error"
         onClose={closeAlert}
       >
-        <AlertTitle>Login Error</AlertTitle>
+        <AlertTitle>{alertType}</AlertTitle>
         {failMessage}
       </Alert>
     </Snackbar>
   );
 }
 
-export default LoginFailToast;
+export default FailToast;

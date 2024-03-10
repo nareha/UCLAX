@@ -6,13 +6,10 @@
   flex-direction: column;
   justify-content: space-around;
   gap: 30vh;
+  text-align: center;
+  align-items: center;
 }
 
 .title-text {
-  text-align: center;
   font-size: 40px;
-}
-
-.description{
-  text-align: center;
 }
