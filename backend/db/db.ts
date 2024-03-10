@@ -32,20 +32,6 @@ db.serialize(() => {
         );`);
 });
 
-/**
- * Closes the DB connection.
- */
-export function closeDB() {
-  // close the db
-  db.close((err: Error | null) => {
-    if (err) {
-      return console.error(err.message);
-    } else {
-      console.log('Close the database connection.');
-    }
-  });
-}
-
 async function findUserByEmail(email: string): Promise<User | null> {
   const query = 'SELECT * FROM users WHERE email = ? LIMIT 1';
   try {
