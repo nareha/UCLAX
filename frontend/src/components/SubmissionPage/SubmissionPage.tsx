@@ -48,19 +48,6 @@ const SubmissionPage: React.FC = () => {
     "max_group_size": undefined
   });
 
-  const postSubmission = (submissionData: Submission) => {
-    axios.post('http://localhost:9000/submission', submissionData)
-      .then(response => {
-        console.log(response.data);
-        setShowSuccess(true);
-      })
-      .catch(error => {
-        console.error('Error posting submission:', error);
-        setAlertText(`Error in posting submission. Please try again.`);
-        setShowAlert(true);
-      });
-  }
-
   const validateForm = (): FormErrors => {
     const errors: FormErrors = {};
     if (formData.interval_start.length === 0 || formData.interval_end.length === 0 ) {
@@ -117,25 +104,31 @@ const SubmissionPage: React.FC = () => {
       axios.get('http://localhost:9000/email', {params: {user_id: String(submission.userid)} })
       .then(response => {
         let userEmail = response.data[0].email;
+        let userContact = submission.contact;
+
         if(userEmail.length >= 10 && userEmail.substring(userEmail.length-10) === "g.ucla.edu"){
           userEmail = userEmail.substring(0, userEmail.length-10) + "ucla.edu";
         }
 
-        let emailString = "";
-        matchingEmails.push(userEmail);
-        matchingEmails.forEach(function(currEmail){
+        let contactString = "";
+        let matchNum = 1;
+
+        matches.push({email: userEmail, contact: userContact});
+        matches.forEach(function(match: { email: string; contact: string }){
           let emailBody = ""
+          let currEmail = match.email;
+          let currContact = match.contact;
           if(currEmail!==userEmail){
-            emailString += currEmail + ", ";
-            emailBody = "You have been matched with user " + userEmail + " through UCLAX for a ridshare. Please contact them if you'd like to set up plans."
+            contactString +=  "Contact " + matchNum.toString() + ": " + currContact + "\n";
+            emailBody = "You have been matched with a user through UC LAX for a rideshare. Their contact info is " + userContact;
+            matchNum += 1;
           }
           else{
-            if(emailString.length!==0){
-              emailString = emailString.substring(0, emailString.length-2);
-              emailBody = "You have been matched with user(s) " + emailString + " through UCLAX for a ridshare. Please contact them if you'd like to set up plans."
+            if(matchNum > 1){
+              emailBody = "You have been matched with " + (matchNum-1).toString()+ " user(s) through UC LAX for a rideshare. Here are their contacts.\n" + contactString;
             }
             else{
-              emailBody = "You have receieved no matches through UCLAX for a rideshare so far. We will notify you of matches in the future."
+              emailBody = "You have receieved no matches through UC LAX for a rideshare so far. We will notify you of matches in the future.";
             }
           }
           let emailInfo = {
@@ -160,7 +153,7 @@ const SubmissionPage: React.FC = () => {
               },
               Subject: {
                 Charset: "UTF-8",
-                Data: "UCLAX Match",
+                Data: "UC LAX Match",
               },
             },
             //these must be verified emails in the AWS SES Portal.
