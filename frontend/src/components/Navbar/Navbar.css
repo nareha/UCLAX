@@ -17,10 +17,6 @@ a:visited {
   color: inherit;
 }
 
-/* 
- * TODO: Update styling for hover and active links.
- *       Just placeholders for now for differentiation.
- */
 a:hover, a.active {
-  text-decoration: underline;
+  color: var(--main);
 }

@@ -1,51 +1,32 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
+import { createTheme, ThemeProvider, Typography, Button } from '@mui/material';
 
-import {Location, Submission} from '../../structures';
-
-import LoginFailToast from '../LoginFailToast/LoginFailToast';
+import FailToast from '../FailToast/FailToast';
+import logo from './logo.png';
 import './LandingPage.css';
 
-const apiCall = () => {
-  axios.get('http://localhost:9000').then((data) => {
-    console.log(data.data);
-  })
+interface Verification {
+  isVerified: boolean;
+  verify: () => void;
 }
 
-const postCall = () => {
-  // Example data - random interval_start, interval_end, destination, and contact
-  const submissionData : Submission = {
-    userid: 1,
-    interval_start: new Date('2024-02-10T09:00:00Z'),
-    interval_end: new Date('2024-02-10T10:00:00Z'),
-    source: Location.UCLA,
-    destination: Location.LAX,
-    contact: '@ChadJohnson'
-  };
-
-  axios.post('http://localhost:9000/submission', submissionData)
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error('Error posting submission:', error);
-    });
-}
-
-const addUserEx = () => {
-  const payload = {
-    email: "mick@ucla.edu"
-  };
-  
-  axios.post('http://localhost:9000/user', payload)
-    .then(response => {
-      console.log(response.data);
-    })
-    .catch(error => {
-      console.error('Error adding user:', error);
-    });
-}
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      color: getComputedStyle(document.querySelector(':root')!).getPropertyValue('--text')
+    },
+    button: {
+      textTransform: 'none'
+    }
+  },
+  palette: {
+    primary: {
+      main: getComputedStyle(document.querySelector(':root')!).getPropertyValue('--main')
+    }
+  }
+});
 
 const addUser = async (user_email: string): Promise<number> => {
   let userid: number = -1;
@@ -62,12 +43,6 @@ const addUser = async (user_email: string): Promise<number> => {
   return userid;
 }
 
-interface Verification {
-  isVerified: boolean;
-  verify: () => void;
-}
-
-
 const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification) => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
@@ -81,7 +56,7 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
   
   const googleLogin = useGoogleLogin ({
     onSuccess: async tokenResponse => {
-      // fetching userinfo can be done on the client or the server
+      // Fetching userInfo can be done on the client or the server
       userInfo = await axios
         .get('https://www.googleapis.com/oauth2/v3/userinfo', {
           headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
@@ -119,33 +94,39 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
         localStorage.setItem("userId", result.toString());
       });
     },
-    onError: errorResponse => {
+    onError: () => {
       setAlertText("Login failed, please try again.");
       setShowAlert(true);
       return;
     }
   });
-  return (
-    <div>
-      <LoginFailToast showAlert={showAlert} failMessage={alertText} closeAlert={() => {setShowAlert(false)}} />
-      <div className="elems">
-        <div className="title-text">
-          <h1>UC LAX</h1>
-        </div>
-        <div className="description">
-          {!isVerified && 
-            <>
-            <p>Verify to start moving</p>
-            <button onClick={ () => googleLogin() }>Sign in with Google</button>
-            </>
-          }
-        </div>
-      </div>
 
-      <button onClick={apiCall}>Get a message from Mickey!</button>
-      <button onClick={postCall}>Send a sample message to Mickey!</button>
-      <button onClick={addUserEx}>Add Mickey as a user to the database!</button>
-    </div>
+  return (
+    <>
+      <FailToast alertType="Login Error" showAlert={showAlert} failMessage={alertText} closeAlert={() => {setShowAlert(false)}} />
+      <ThemeProvider theme={theme}>
+        <div className="elems">
+          <img src={logo} alt="UC LAX Logo" style={{width: "100%", height: "auto", maxWidth: "350px"}} />
+          <div>  
+              {isVerified
+                ?
+                  <>
+                    <Typography variant="subtitle1">
+                      Verified! Start moving by navigating to the other pages.               
+                    </Typography>
+                  </>
+                :
+                  <>
+                    <Typography variant="subtitle1">
+                      Verify to start moving               
+                    </Typography>
+                    <Button variant="contained" onClick={() => googleLogin()}>Login with UCLA Gmail</Button>
+                  </>
+              }
+          </div>
+        </div>
+      </ThemeProvider>
+    </>
   );
 }
 

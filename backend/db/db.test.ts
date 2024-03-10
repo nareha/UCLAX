@@ -12,7 +12,7 @@ describe('Database Operations', () => {
     const email = "sorrow@ucla.edu";
     const message = await addUser(email);
     expect(message).toBeInstanceOf(Array);
-    expect(message[1]).not.toEqual(-1);
+    expect(message[0]).toMatch(/has been added/);
   });
 
   test('do not allow adding a user twice', async () => {

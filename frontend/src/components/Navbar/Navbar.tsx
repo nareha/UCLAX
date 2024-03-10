@@ -14,7 +14,6 @@ const Navbar: React.FC<Props> = ({isVerified}: Props) => {
       {isVerified &&
         <>
           <NavLink to="/ridesharers"><p>Ridesharers</p></NavLink>
-          <NavLink to="/profile"><p>Profile</p></NavLink>
           <NavLink to="/submit"><p>Submit Ride</p></NavLink>
         </>
       }
