@@ -14,9 +14,9 @@ a {
 }
 
 a:visited {
-  color: inherit;
+  color: inherit !important;
 }
 
 a:hover, a.active {
-  color: var(--main);
+  color: var(--main) !important;
 }

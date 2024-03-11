@@ -173,6 +173,8 @@ const SubmissionPage: React.FC = () => {
           .catch(function (err) {
             console.error(err, err.stack);
           });
+
+          setShowSuccess(true);
         })
       })
       .catch(error => {
@@ -181,6 +183,8 @@ const SubmissionPage: React.FC = () => {
     })
     .catch(error => {
       console.error('Error posting submission:', error);
+      setAlertText(`Error in posting submission. Please try again.`);
+      setShowAlert(true);
     });
     
   };
