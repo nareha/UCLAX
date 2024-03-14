@@ -1,6 +1,8 @@
 import { type Submission, type User } from "../src/structures";
 import sqlite3 from 'sqlite3';
 
+/** @module database */
+
 // open the db
 const db = new sqlite3.Database('./rideshare.db', (err: Error | null) => {
   if (err) {
