@@ -30,7 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "docs": "jsdoc -c jsdoc.json"
+    "docs": "typedoc --plugin typedoc-plugin-rename-defaults --entryPointStrategy expand src/"
   },
   "eslintConfig": {
     "extends": [
@@ -49,5 +49,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typedoc": "^0.25.12",
+    "typedoc-plugin-rename-defaults": "^0.7.0"
   }
 }
