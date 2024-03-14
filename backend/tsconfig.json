@@ -108,6 +108,7 @@
   },
   "typedocOptions": {
       "entryPoints": ["src/index.ts", "db/db.ts"],
-      "out": "../documentation/backend"
+      "out": "../documentation/backend",
+      "plugin": "typedoc-plugin-missing-exports"
   }
 }

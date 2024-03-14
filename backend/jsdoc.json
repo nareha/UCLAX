@@ -1,0 +1,26 @@
+{
+    "plugins": [
+        "node_modules/better-docs/typescript",
+        "node_modules/better-docs/category",
+        "jsdoc-route-plugin"
+    ],
+    "recurseDepth": 10,
+    "source": {
+        "include": ["db/db.ts", "src/index.ts"],
+        "includePattern": "\\.(jsx|js|ts|tsx)$",
+        "exclude": [ "node_modules" ]
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": ["category"]
+    },
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": false
+    },
+    "opts": {
+        "destination": "../documentation/backend",
+        "template": "node_modules/docdash",
+        "recurse": true
+    }
+}
