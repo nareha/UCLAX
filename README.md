@@ -1,3 +1,28 @@
+# UC LAX
+
+## Team Members
+- Alan Wu
+- Joyce Tung
+- Nareh Agazaryan
+- Steven Zhang
+- Yichun Li
+
+## Project Description
+A more efficient way for UCLA students to rideshare to and from nearby airports.
+
+## Build & Deployment
+Builds are triggered upon any pushes made to the repository.
+
+To deploy this application, you can do so locally by:
+1. Cloning the repository
+2. Entering the /frontend directory
+3. Running `npm install` to install the necessary dependencies
+4. Running `npm start` to start the frontend React application
+5. Entering the /backend directory in a new terminal
+6. Running `npm install` to install the necessary dependencies
+7. Compiling the TypeScript code by running `tsc` or `tsc -w` to watch for changes
+8. Running `npm start` to start the backend Node.js server
+
 # Repository Template
 
 [![Build Status](https://app.travis-ci.com/melaasar/cs130-template.svg?branch=master)](https://app.travis-ci.com/github/melaasar/cs130-template)
