@@ -9,17 +9,19 @@ enum Location {
 describe('Database Operations', () => {
 
   test('addUser adds a user successfully', async () => {
-    const email = "sorrow@ucla.edu";
+    const email = "joebruin@ucla.edu";
     const message = await addUser(email);
     expect(message).toBeInstanceOf(Array);
     expect(message[0]).toMatch(/has been added/);
+    expect(message[1]).not.toBe(-1);
   });
 
   test('do not allow adding a user twice', async () => {
-    const email = "sorrow@ucla.edu";
+    const email = "joebruin@ucla.edu";
     const message = await addUser(email);
     expect(message).toBeInstanceOf(Array);
     expect(message[0]).toMatch(/already exists/);
+    expect(message[1]).toBeGreaterThanOrEqual(0);
   });
 
   test('add a submission successfully', async () => {
