@@ -36,6 +36,12 @@ AWS.config.update({
   region: "us-east-2"
 });
 
+/**
+ * The submission page component.
+ * 
+ * @component
+ * @category Component
+ */
 const SubmissionPage: React.FC = () => {
   type FormErrors = Partial<Record<'interval' | 'missing_field' | "same_source_dest", string>>
 
