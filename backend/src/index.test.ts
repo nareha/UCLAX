@@ -22,6 +22,7 @@ describe('Express Server Endpoints', () => {
     it('should retrieve submissions', async () => {
       const response = await request(app).get('/table');
       expect(response.statusCode).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
     });
   });
 
@@ -39,7 +40,7 @@ describe('Express Server Endpoints', () => {
         .post('/submission')
         .send(submission);
       expect(response.statusCode).toBe(200);
-      expect((await response.request).body).toBeInstanceOf(Array);
+      expect(response.body).toBeInstanceOf(Array);
     });
   });
 
