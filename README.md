@@ -20,8 +20,9 @@ To deploy this application, you can do so locally by:
 4. Running `npm start` to start the frontend React application
 5. Entering the /backend directory in a new terminal
 6. Running `npm install` to install the necessary dependencies
-7. Compiling the TypeScript code by running `tsc` or `tsc -w` to watch for changes
+7. Run `npx ts-node src/index.ts` to start the backend
 8. Running `npm start` to start the backend Node.js server
+9. Visit the web app by going to `http://localhost:3000/`
 
 # Repository Template
 
