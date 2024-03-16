@@ -16,6 +16,7 @@
     "@types/react-dom": "^18.2.18",
     "aws-sdk": "^2.1569.0",
     "axios": "^1.6.7",
+    "docdash": "^2.0.2",
     "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -28,7 +29,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "docs": "typedoc --plugin typedoc-plugin-rename-defaults --entryPointStrategy expand src/"
   },
   "eslintConfig": {
     "extends": [
@@ -47,5 +49,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typedoc": "^0.25.12",
+    "typedoc-plugin-rename-defaults": "^0.7.0"
   }
 }

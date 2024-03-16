@@ -1,3 +1,7 @@
+/**
+ * Loads the App class into the browser.
+ * @module
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -10,6 +14,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+//loads the App class into the browser
 root.render(
   <React.StrictMode>
     <BrowserRouter>

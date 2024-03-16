@@ -1,3 +1,8 @@
+/**
+ *Page displaying info boxes for all UC LAX Ridesharers.
+ *Only available to logged in users.
+ *@module components/RidesharersPage
+ */
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -40,6 +45,7 @@ const MenuProps = {
   },
 };
 
+/**@ignore */
 const RidesharersPage: React.FC = () => {
   // All ridesharers and the actual displayed ridesharers
   const [ridesharers, setRidesharers] = useState<Info[]>([]);
@@ -95,6 +101,7 @@ const RidesharersPage: React.FC = () => {
     return sorted
   }
 
+  //the below variables are used to change the ordering when the user changes the sorting and filtering methods
   const sourceChange = (event: SelectChangeEvent<typeof sources>) => {
     const resSources = typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value;
     setSources(resSources);
@@ -119,6 +126,7 @@ const RidesharersPage: React.FC = () => {
     setProcessedRidershares(sortRides(sortBy, newOrdering, filterRides(sources, dests, ridesharers)));
   };
 
+  //reset to default sorting and filtering
   const resetGrid = () => {
     setSources(["UCLA", "LAX", "BUR"]);
     setDests(["UCLA", "LAX", "BUR"]);

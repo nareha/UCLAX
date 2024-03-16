@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>src/index.ts - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-database.html">database</a><ul class='methods'><li data-type='method'><a href="module-database.html#.addSubmission">addSubmission</a></li><li data-type='method'><a href="module-database.html#.addUser">addUser</a></li><li data-type='method'><a href="module-database.html#.getEmail">getEmail</a></li><li data-type='method'><a href="module-database.html#.querySubmissions">querySubmissions</a></li><li data-type='method'><a href="module-database.html#.querySubmissionsAndEmails">querySubmissionsAndEmails</a></li></ul></li><li><a href="module-server.html">server</a></li></ul>
+    
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">src/index.ts</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @module server */
+import express, { Express, Request, Response } from "express";
+import dotenv from "dotenv";
+import type { Submission } from "./structures";
+
+import { formatDate, scanMatches } from "./utils";
+import { addSubmission, querySubmissions, querySubmissionsAndEmails, getEmail, addUser } from "../db/db";
+
+dotenv.config();
+
+const app: Express = express();
+app.use(express.json());
+const port = process.env.PORT || 9000;
+const cors = require('cors')
+
+app.use(cors())
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Mickey's Express Server. Have a wonderful day!");
+});
+
+/**
+ * Access the set of submitted rideshares.
+ * 
+ * @name Submitted Rideshares
+ * @route {GET} /table
+ */
+app.get("/table", (req: Request, res: Response) => {
+  const submissions = querySubmissions();
+  submissions.then((result) => {
+    result.forEach((submission) => {
+      submission.early_time = formatDate(new Date(submission.early_time));
+      submission.late_time = formatDate(new Date(submission.late_time));
+    });
+    res.send(result);
+  });
+});
+
+/**
+ * The email GET endpoint is called by the frontend on every user submission.
+ * It is used to send emails notifying users of matching submissions. Every
+ * email retrieved from this endpoint is sent to the user. It accepts the
+ * user id in the request, and responds with the email.
+ * 
+ * @name User email
+ * @route {GET} /email
+ */
+app.get("/email", (req: Request, res: Response) => {
+  let param = req.query.user_id as string;
+  const submissionPromise = getEmail(parseInt(param));
+  submissionPromise.then((row) => {
+    res.send(row);
+  });
+});
+
+/**
+ * The submission POST endpoint is called by the frontend on every user submission.
+ * It is used to add a new submission for a user, or modify a user's old submission.
+ *  
+ * @name Add submission
+ * @route {POST} /submission
+ */
+app.post("/submission", (req: Request, res: Response) => {
+  //make sure that the body of the request has the data that we want
+  //parse the body of the request and store as a Submission
+  let submission: Submission = req.body;
+  addSubmission(submission).then((result) => {
+    console.log("Received: ", submission);
+
+    const submissionsPromise = querySubmissionsAndEmails();
+    submissionsPromise.then((submissions) => {
+      const matches: Submission[] = scanMatches(submission, submissions);
+      console.log("Matches: ", matches);
+      res.send(matches);
+    });
+
+  });
+});
+
+/**
+ * The user POST endpoint is called on successful user signin with Google SSO.
+ * If the user is new, they're added to the users table. Returns the user's id
+ * in the response.
+ * 
+ * @name Add user
+ * @route {POST} /user
+ */
+app.post("/user", (req: Request, res: Response) => {
+  let email = req.body.email;
+  console.log("Received: ", email);
+
+  const receipt = addUser(email);
+  receipt.then((result) => {
+    res.send(result);
+    console.log(result);
+  });
+  
+});
+
+app.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`);
+});
+
+export { app };</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Fri Mar 15 2024 20:14:30 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

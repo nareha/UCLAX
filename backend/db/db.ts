@@ -1,6 +1,8 @@
 import { type Submission, type User } from "../src/structures";
 import sqlite3 from 'sqlite3';
 
+/** @module database */
+
 // open the db
 const db = new sqlite3.Database('./rideshare.db', (err: Error | null) => {
   if (err) {
@@ -48,6 +50,12 @@ async function findUserByEmail(email: string): Promise<User | null> {
   }
 }
 
+/**
+ * Adds a user to the database, if the user does not exist yet.
+ * 
+ * @param email The user's email, as a string
+ * @returns Tuple: Action performed (as a string), user's id.
+ */
 export async function addUser(email: string): Promise<[string, Number | undefined]> {
   console.log("Checking if user is already in db");
 
@@ -136,6 +144,11 @@ export function querySubmissions(): Promise<any[]> {
   });
 }
 
+/**
+ * Queries the database for a user's submission and their email.
+ * 
+ * @returns User's submission with their email as a promise.
+ */
 export function querySubmissionsAndEmails(): Promise<any[]> {
   return new Promise((resolve, reject) => {
     let queryString: string = 'SELECT * FROM submissions JOIN users on submissions.user_id = users.user_id';
@@ -151,6 +164,12 @@ export function querySubmissionsAndEmails(): Promise<any[]> {
   });
 }
 
+/**
+ * Queries the user table by `user_id` for a user's email.
+ * 
+ * @param user_id The user's id in the user table.
+ * @returns Row in the user table with primary key `user_id`.
+ */
 export function getEmail(user_id: Number): Promise<any[]> {
   return new Promise((resolve, reject) => {
     let queryString: string = 'SELECT * FROM users WHERE user_id = ? LIMIT 1';
