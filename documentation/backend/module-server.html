@@ -123,6 +123,178 @@
 
         
             
+<h4 class="name" id="Addsubmission"><span class="type-signature type-signature-route">(route) </span>Add submission<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">POST</td>
+                            <td class="name last">/submission</td>
+                            </tr>
+                            </table>
+                            The submission POST endpoint is called by the frontend on every user submission.
+It is used to add a new submission for a user, or modify a user's old submission.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_index.ts.html">src/index.ts</a>, <a href="src_index.ts.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">POST</td>
+                            <td class="name last">/submission</td>
+                            </tr>
+                            </table>
+                            The submission POST endpoint is called by the frontend on every user submission.
+It is used to add a new submission for a user, or modify a user's old submission.
+</div>
+
+
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="Adduser"><span class="type-signature type-signature-route">(route) </span>Add user<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">POST</td>
+                            <td class="name last">/user</td>
+                            </tr>
+                            </table>
+                            The user POST endpoint is called on successful user signin with Google SSO.
+If the user is new, they're added to the users table. Returns the user's id
+in the response.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_index.ts.html">src/index.ts</a>, <a href="src_index.ts.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">POST</td>
+                            <td class="name last">/user</td>
+                            </tr>
+                            </table>
+                            The user POST endpoint is called on successful user signin with Google SSO.
+If the user is new, they're added to the users table. Returns the user's id
+in the response.
+</div>
+
+
+
+
+
+
+
+
+        
+            
 <h4 class="name" id="SubmittedRideshares"><span class="type-signature type-signature-route">(route) </span>Submitted Rideshares<span class="type-signature"></span></h4>
 
 
@@ -205,6 +377,95 @@
 
 
         
+            
+<h4 class="name" id="Useremail"><span class="type-signature type-signature-route">(route) </span>User email<span class="type-signature"></span></h4>
+
+
+
+
+
+<dl class="details">
+    
+    <dt class="tag-description">Description:</dt>
+    <dd class="tag-description"><ul class="dummy"><li><h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">/email</td>
+                            </tr>
+                            </table>
+                            The email GET endpoint is called by the frontend on every user submission.
+It is used to send emails notifying users of matching submissions. Every
+email retrieved from this endpoint is sent to the user. It accepts the
+user id in the request, and responds with the email.</li></ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_index.ts.html">src/index.ts</a>, <a href="src_index.ts.html#line32">line 32</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description usertext">
+    <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">/email</td>
+                            </tr>
+                            </table>
+                            The email GET endpoint is called by the frontend on every user submission.
+It is used to send emails notifying users of matching submissions. Every
+email retrieved from this endpoint is sent to the user. It accepts the
+user id in the request, and responds with the email.
+</div>
+
+
+
+
+
+
+
+
+        
     
 
     
@@ -226,7 +487,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Fri Mar 15 2024 18:57:41 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 4.0.2</a> on Fri Mar 15 2024 20:14:30 GMT-0700 (Pacific Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

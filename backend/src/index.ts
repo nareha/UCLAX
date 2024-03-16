@@ -39,7 +39,11 @@ app.get("/table", (req: Request, res: Response) => {
 /**
  * The email GET endpoint is called by the frontend on every user submission.
  * It is used to send emails notifying users of matching submissions. Every
- * email retrieved from this endpoint is sent to the user.
+ * email retrieved from this endpoint is sent to the user. It accepts the
+ * user id in the request, and responds with the email.
+ * 
+ * @name User email
+ * @route {GET} /email
  */
 app.get("/email", (req: Request, res: Response) => {
   let param = req.query.user_id as string;
@@ -52,6 +56,9 @@ app.get("/email", (req: Request, res: Response) => {
 /**
  * The submission POST endpoint is called by the frontend on every user submission.
  * It is used to add a new submission for a user, or modify a user's old submission.
+ *  
+ * @name Add submission
+ * @route {POST} /submission
  */
 app.post("/submission", (req: Request, res: Response) => {
   //make sure that the body of the request has the data that we want
@@ -74,6 +81,9 @@ app.post("/submission", (req: Request, res: Response) => {
  * The user POST endpoint is called on successful user signin with Google SSO.
  * If the user is new, they're added to the users table. Returns the user's id
  * in the response.
+ * 
+ * @name Add user
+ * @route {POST} /user
  */
 app.post("/user", (req: Request, res: Response) => {
   let email = req.body.email;
