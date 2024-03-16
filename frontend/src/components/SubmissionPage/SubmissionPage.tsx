@@ -1,3 +1,7 @@
+/**
+ *Page displaying the Submit Ride Form, allowing users to submit their info to the UC LAX Rideshare database.
+ *@module components/SubmissionPage
+ */
 import React, { useState } from 'react';
 import axios from 'axios';
 import AWS from 'aws-sdk';
@@ -28,6 +32,7 @@ const theme = createTheme({
 });
 
 //The accessKeyId, secretAccessKey, and sessionToken expire after 12 hours and must be re-retrieved from the AWS Access Portal.
+//The credentials must be from a AWS IAM User who is part of an AWS SES Project
 AWS.config.update({
   apiVersion: "2010-12-01",
   accessKeyId: "",
@@ -37,10 +42,7 @@ AWS.config.update({
 });
 
 /**
- * The submission page component.
- * 
- * @component
- * @category Component
+@ignore
  */
 const SubmissionPage: React.FC = () => {
   type FormErrors = Partial<Record<'interval' | 'missing_field' | "same_source_dest", string>>
@@ -54,6 +56,7 @@ const SubmissionPage: React.FC = () => {
     "max_group_size": undefined
   });
 
+  //Ensures the user has valid fields in their submission form
   const validateForm = (): FormErrors => {
     const errors: FormErrors = {};
     if (formData.interval_start.length === 0 || formData.interval_end.length === 0 ) {
@@ -102,16 +105,21 @@ const SubmissionPage: React.FC = () => {
       "max_group_size": formData.max_group_size
     };
     
+    //submits the submission to the database
     axios.post('http://localhost:9000/submission', submission)
     .then(response => {
       const matches = response.data;
+      //gets all matching users, and creats an array that contains these user emails
       const matchingEmails: string[] = matches.map((user: {email: string}) => user.email);
       console.log(matchingEmails);
+
+      //gets the email of the current user
       axios.get('http://localhost:9000/email', {params: {user_id: String(submission.userid)} })
       .then(response => {
         let userEmail = response.data[0].email;
         let userContact = submission.contact;
 
+        //If the user's domain is g.ucla.edu, use their ucla.edu email, as it is the same email, but the g.ucla.edu one may not be verified in AWS SES
         if(userEmail.length >= 10 && userEmail.substring(userEmail.length-10) === "g.ucla.edu"){
           userEmail = userEmail.substring(0, userEmail.length-10) + "ucla.edu";
         }
@@ -124,12 +132,15 @@ const SubmissionPage: React.FC = () => {
           let emailBody = ""
           let currEmail = match.email;
           let currContact = match.contact;
+
+          //gives each user matched to current user an email, informing them of the current user's contact
           if(currEmail!==userEmail){
             contactString +=  "Contact " + matchNum.toString() + ": " + currContact + "\n";
             emailBody = "You have been matched with a user through UC LAX for a rideshare. Their contact info is " + userContact;
             matchNum += 1;
           }
           else{
+            //gives the current user an email with the contact of all users they have been matched to
             if(matchNum > 1){
               emailBody = "You have been matched with " + (matchNum-1).toString()+ " user(s) through UC LAX for a rideshare. Here are their contacts.\n" + contactString;
             }

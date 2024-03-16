@@ -1,12 +1,18 @@
+/**
+ *Navigation Bar that displays page links at the top of the App.
+ *@module components/NavBar
+ */
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 import './Navbar.css';
 
-interface Props {
+/** User's verification status */
+export interface Props {
   isVerified: boolean;
 }
 
+/** @ignore */
 const Navbar: React.FC<Props> = ({isVerified}: Props) => {
   return (
     <nav>

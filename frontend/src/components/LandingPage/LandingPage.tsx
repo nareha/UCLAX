@@ -1,3 +1,7 @@
+/**
+ *Home and starting page of the App.
+ *@module components/LandingPage
+ */
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useGoogleLogin } from '@react-oauth/google';
@@ -7,11 +11,14 @@ import FailToast from '../FailToast/FailToast';
 import logo from './logo.png';
 import './LandingPage.css';
 
-interface Verification {
+/** User's current verification status. */
+export interface Verification {
   isVerified: boolean;
+  /** Updates the user's verification status */
   verify: () => void;
 }
 
+//Theme used to format the Landing Page UI
 const theme = createTheme({
   typography: {
     allVariants: {
@@ -28,7 +35,13 @@ const theme = createTheme({
   }
 });
 
-const addUser = async (user_email: string): Promise<number> => {
+/**
+ * Adds the user to the database based on their email address 
+ * 
+ * @param user_email The user's email, as a string
+ * @returns The user's id as a Number
+ */
+export const addUser = async (user_email: string): Promise<number> => {
   let userid: number = -1;
   await axios.post('http://localhost:9000/user', {email: user_email})
     .then(response => {
@@ -43,10 +56,13 @@ const addUser = async (user_email: string): Promise<number> => {
   return userid;
 }
 
+/** @ignore */
 const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification) => {
+  //states used to show error alerts
   const [showAlert, setShowAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
 
+  //format of user info retrieved from google login
   let userInfo = {
     email:"",
     email_verified:"",
@@ -64,11 +80,15 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
         .then(res => res.data);
       
       console.log(userInfo);
+
+      //if the user does not have an email, or has an unverified one, or does not have a name, give an error alert
       if (!('email' in userInfo) || !('email_verified' in userInfo) || !('name' in userInfo) ){ 
         setAlertText("Unable to login with this account");
         setShowAlert(true);
         return;
       }
+
+      //hd must have value g.ucla.edu in order for user to sign in
       if (!('hd' in userInfo) ){
         setAlertText("User must sign in with UCLA email");
         setShowAlert(true);
@@ -76,11 +96,14 @@ const LandingPage: React.FC<Verification> = ({verify, isVerified}: Verification)
       }
 
       console.log(userInfo.email)
+      //user must have verified email
       if (!userInfo.email_verified) {
         setAlertText("Email is not verified");
         setShowAlert(true);
         return;
       }
+
+      //hd must have value g.ucla.edu in order for user to sign in
       if (userInfo.hd !== "g.ucla.edu") {
         setAlertText("Not a UCLA Email");
         setShowAlert(true);
